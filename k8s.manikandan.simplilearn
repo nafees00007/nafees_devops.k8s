@@ -1,0 +1,1829 @@
+CONTAINER ORCHESTRATION USING KUBERNETESE
+
+DAY1
+
+mkdir node-app
+   80  cd node-app/
+   81  vi package.json
+   82  vi index.js
+   83  ls
+   84  vi Dockerfile
+   85  ls
+   86  ls -l
+   87  pwd
+   88  docker build -t node-app:1.0.0 .
+   89  docker images
+   90  docker run -d -p 8080:8080 --name node-app node-app:1.0.0
+   91  docker logs node-app
+   92  docker ps -a
+   93  docker stats
+   94  pwd
+   95  docker ps 
+   96  docker ps -a
+   97  docker rm helloworld:1.0.0
+   98  docker rm helloworld1
+   99  docker rm helloworld
+  100  docker images
+  101  docker exec -it node-app bash
+  102  ls
+  103  pwd
+  104  docker cp index.js .
+  105  docker cp index.js node-app:/home/labuser/docker/node-app
+  106  docker cp index.js node-app1
+  107  docker cp index.js node-app
+  108  exit
+  109  apt install docker.io
+  110  apt update 
+  111  ls
+  112  cd /docker
+  113  pwd
+  114  ls 
+  115  cd docker
+  116  ls
+  117  rm -rf docker-sample/
+  118  rm -rf node-app/
+  119  ls
+  120  pwd
+  121  mkdir node-app
+  122  cd node-app
+  123  ls
+  124  vi index.js
+  125  ls 
+  126  vi package.json
+  127  ls
+  128  vi Dockerfile
+  129  vi Dockerfile 
+  130  ls
+  131  pwd
+  132  docker build -t node-app:1.0.0 .
+  133  docker images
+  134  docker rmi helloworld node openjdk node
+  135  docker rmi a2adc3aa6a14 b03abf062002 b273004037cc
+  136  docker images
+  137  clear
+  138  docker run -d -p 8080:8080 --name node-app node-app:1.0.0
+  139  docker stop 92a12101d2378233e96f3a916854561f88bc3c06970e9ce5c4757878a80d1497
+  140  docker run -d -p 8080:8080 --name node-app node-app:1.0.0
+  141  docker stop 92a12101d2378233e96f3a916854561f88bc3c06970e9ce5c4757878a80d1497 
+  142  docker run -d -p 8080:8080 --name node-app1 node-app:1.0.0
+  143  docker ps 
+  144  docker logs node-app1
+  
+  
+  index.js
+  ---------
+  const express = require("express");
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("How are you doing");
+});
+
+app.listen(8080, () => {
+  console.log("Listening on port 8080");
+});
+
+package.json
+-----------
+{
+  "dependencies": {
+    "express": "*"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
+
+Dockerfile
+-------
+
+# Specify a base image
+FROM node:alpine
+
+WORKDIR /usr/app
+
+# Install some depenendencies
+COPY ./package.json ./
+RUN npm install
+COPY ./ ./
+
+# Default command
+CMD ["npm", "start"]
+
+
+
+
+
+
+
+
+
+ls
+  147  pwd
+  
+  148  docker ps
+  149  clear
+  150  docker ps
+  151  docker run -d -p 8081:8080 --name node-app2 node-app:1.0.0
+  152  dokcer ps
+  153  docker ps
+  154  docker ps  -a
+  155  clear
+  156  docker ps -a
+  157  curl localhost:8080
+  158  docker logs
+  159  docker logs node-app1
+  160  docker logs node-app2
+  161  docker ps
+  162  docker logs 68ce7515a9f2
+  163  docker run -d -p 8082:8080  node-app:1.0.0
+  164  docker ps
+  165  docker exec -it node-app1 sh
+  166  docker stats 
+  
+  
+
+  history 
+  168  ls
+  169  pwd
+  170  docker ps
+  171  ls
+  172  pwd
+  173  cd ..
+  174  ls
+  175  vi test.txt
+  176  vi test.txt 
+  177  docker exec -it node-app1 sh
+  178  ls
+  179  docker cp test.txt node-app1:/usr/app
+  180  docker exec -it node-app1 sh
+  181  docker cp node-app1:/usr/app/test1.txt .
+  182  ls
+  183
+  
+  
+  
+  
+  
+  
+    
+  
+  
+
+ls
+  147  pwd
+  
+  148  docker ps
+  149  clear
+  150  docker ps
+  151  docker run -d -p 8081:8080 --name node-app2 node-app:1.0.0
+  152  dokcer ps
+  153  docker ps
+  154  docker ps  -a
+  155  clear
+  156  docker ps -a
+  157  curl localhost:8080
+  158  docker logs
+  159  docker logs node-app1
+  160  docker logs node-app2
+  161  docker ps
+  162  docker logs 68ce7515a9f2
+  163  docker run -d -p 8082:8080  node-app:1.0.0vĺ
+  
+  history 
+  168  ls
+  169  pwd
+  170  docker ps
+  171  ls
+  172  pwd
+  173  cd ..
+  174  ls
+  175  vi test.txt
+  176  vi test.txt 
+  177  docker exec -it node-app1 sh
+  178  ls
+  179  docker cp test.txt node-app1:/usr/app
+  180  docker exec -it node-app1 sh
+  181  docker cp node-app1:/usr/app/test1.txt .
+  182  ls
+  183  history
+  
+  
+  
+  
+  mkdir node-app
+   80  cd node-app/
+   81  vi package.json
+   82  vi index.js
+   83  ls
+   84  vi Dockerfile
+   85  ls
+   86  ls -l
+   87  pwd
+   88  docker build -t node-app:1.0.0 .
+   89  docker images
+   90  docker run -d -p 8080:8080 --name node-app node-app:1.0.0
+   91  docker logs node-app
+   92  docker ps -a
+   93  docker stats
+   94  pwd
+   95  docker ps 
+   96  docker ps -a
+   97  docker rm helloworld:1.0.0
+   98  docker rm helloworld1
+   99  docker rm helloworld
+  100  docker images
+  101  docker exec -it node-app bash
+  102  ls
+  103  pwd
+  104  docker cp index.js .
+  105  docker cp index.js node-app:/home/labuser/docker/node-app
+  106  docker cp index.js node-app1
+  107  docker cp index.js node-app
+  108  exit
+  109  apt install docker.io
+  110  apt update 
+  111  ls
+  112  cd /docker
+  113  pwd
+  114  ls 
+  115  cd docker
+  116  ls
+  117  rm -rf docker-sample/
+  118  rm -rf node-app/
+  119  ls
+  120  pwd
+  121  mkdir node-app
+  122  cd node-app
+  123  ls
+  124  vi index.js
+  125  ls 
+  126  vi package.json
+  127  ls
+  128  vi Dockerfile
+  129  vi Dockerfile 
+  130  ls
+  131  pwd
+  132  docker build -t node-app:1.0.0 .
+  133  docker images
+  134  docker rmi helloworld node openjdk node
+  135  docker rmi a2adc3aa6a14 b03abf062002 b273004037cc
+  136  docker images
+  137  clear
+  138  docker run -d -p 8080:8080 --name node-app node-app:1.0.0
+  139  docker stop 92a12101d2378233e96f3a916854561f88bc3c06970e9ce5c4757878a80d1497
+  140  docker run -d -p 8080:8080 --name node-app node-app:1.0.0
+  141  docker stop 92a12101d2378233e96f3a916854561f88bc3c06970e9ce5c4757878a80d1497 
+  142  docker run -d -p 8080:8080 --name node-app1 node-app:1.0.0
+  143  docker ps 
+  144  docker logs node-app1
+  145  history
+  146  ls
+  147  pwd
+  148  docker ps
+  149  clear
+  150  docker ps
+  151  docker run -d -p 8081:8080 --name node-app2 node-app:1.0.0
+  152  dokcer ps
+  153  docker ps
+  154  docker ps  -a
+  155  clear
+  156  docker ps -a
+  157  curl localhost:8080
+  158  docker logs
+  159  docker logs node-app1
+  160  docker logs node-app2
+  161  docker ps
+  162  docker logs 68ce7515a9f2
+  163  docker run -d -p 8082:8080  node-app:1.0.0
+  164  docker ps
+  165  docker exec -it node-app1 sh
+  166  docker stats 
+  167  history 
+  
+  
+  
+  
+  
+   
+  mkdir cmd
+  190  cd cmd
+  191  vi Dockerfile
+  192  pwd
+  193  docker build -t cmd:1.0.0 .
+  194  docker images
+  195  docker run -d --name cmd1 cmd:1.0.0 
+  196  docker logs cmd1
+  197  docker run -d --name cmd2 cmd:1.0.0 echo Hello india
+  198  docker logs cmd2
+  199  cd ..
+  200  ls
+  201  mkdir entrypoint
+  202  cd entrypoint/
+  203  ls
+  204  vi Dockerfile
+  205  ls
+  206  docker build -t entrypoint:1.0.0 .
+  207  docker run -d --name entrypoint1 entrypoint:1.0.0
+  208  docker logs entrypoint1
+  209  docker run -d --name entrypoint2 entrypoint:1.0.0 echo Hello India
+  210  docker logs entrypoint2
+ 
+ 
+  cmd ke case me overwrite ho jata hai lekin entrypoint ke case me append ho jata hai
+  
+  
+  
+  
+  
+  
+   mkdir java-app
+  217  vi Main.java
+  218  vi Dockerfile
+  219  ls
+  220  mv Main.java ./java-app/
+  221  mv Dockerfile ./java-app/
+  222  cd java-app/
+  223  ls
+  224  ls -l
+  225  docker build -t java-app:1.0.0 .
+  226  docker run -d --name -p 8090:8080 java-app1 java-app:1.0.0
+  227  docker images
+  228  docker run -d --name java-app1 -p 8090:8080 java-app:1.0.0
+  229  docker logs java-app1
+  230  docker run -d --name java-app2 -p 8091:8080 java-app:1.0.0
+  231  docker logs java-app2
+  232  docker ps 
+  233  docker ps -a
+  234  docker logs java-app2
+  235  docker rm java-app1
+  236  docker rm java-app2
+  237  docker ps -a
+  238  docker images 
+  239  docker rmi java-app
+  240  docker rmi 21792342489e
+  241  docker images
+  242  docker ps
+  243  docker rm node-app1
+  244  docker stop node-app1
+  245  docker ps
+  246  docker ps -a
+  247  docker rm node-app
+  248  docker images
+  249  docker ps
+  250  history 
+  
+  
+  
+  
+  
+  day2
+  
+  
+    mkdir node-app
+  693  cd node-app
+  694  vi index.js
+  695  vi package.json
+  696  ls
+  697  vi Dockerfile
+  698  ls
+  699  ls -l
+  700  docker build -t node-app:1.0.0 .
+  701  dockr images
+  702  docker images
+  703  docker ps
+  704  docker rmi 991870c4358b efa8019b2be6 82dc307c0621
+  705  docker images
+  706  docker rm java-app
+  707  docker rm efa8019b2be6
+  708  docker rmi efa8019b2be6
+  709  clear
+  710  pwd
+  711  docker build -t node-app:1.0.0 .
+  712  docker run -d -p 8080:8080 node-app1 node-app:1.0.0
+  713  docker images
+  714  docker run -d -p 8080:8080 --name node-app1 node-app:1.0.0
+  715  docker logs node-app1
+  716  clear
+  717  docker images
+  718  docker inspect ce8f66410dbc
+  719  clear
+  720  docker build -t node-app:1.0.1 .
+  721  pwd
+  722  docker images
+  723  docker tag node-app:1.0.1 manikandanramasamy/node-app:1.0.1
+  724  docker push manikandanramasamy/node-app:1.0.1
+  725  docker images
+  726  docker rmi ce8f66410dbc
+  727  docker stop 1249f7f63127
+  728  docker rmi manikandanramasamy/node-app
+  729  docker rmi ce8f66410dbc
+  730  docker rmi -f ce8f66410dbc
+  731  docker images
+  732  docker run -d -p 8082:8080 --name node-app2 manikandanramasamy/node-app:1.0.1
+  733  docker logs node-app2
+  734  docker login 
+  735  history 
+  736  docker images
+  737  history
+  
+  
+  Dockerfile
+  ---------------
+# Specify a base image
+FROM node:alpine
+
+WORKDIR /usr/app
+
+# Install some depenendencies
+COPY ./package.json ./
+RUN npm install
+COPY ./ ./
+
+# Default command
+CMD ["npm", "start"]
+
+
+index.js
+-------------
+const express = require("express");
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("How are you doing");
+});
+
+app.listen(8080, () => {
+  console.log("Listening on port 8080");
+});
+
+package.json 
+--------------
+{
+  "dependencies": {
+    "express": "*"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
+
+https://github.com/manikandanramasamy1981/k8s-training
+
+
+
+
+ docker build -t node-app:1.0.0 .
+  712  docker run -d -p 8080:8080 node-app1 node-app:1.0.0
+  713  docker images
+  714  docker run -d -p 8080:8080 --name node-app1 node-app:1.0.0
+  715  docker logs node-app1
+  716  clear
+  717  docker images
+  718  docker inspect ce8f66410dbc
+  719  clear
+  720  docker build -t node-app:1.0.1 .
+  721  pwd
+  722  docker images
+  723  docker tag node-app:1.0.1 manikandanramasamy/node-app:1.0.1
+  724  docker push manikandanramasamy/node-app:1.0.1
+  725  docker images
+  726  docker rmi ce8f66410dbc
+  727  docker stop 1249f7f63127
+  728  docker rmi manikandanramasamy/node-app
+  729  docker rmi ce8f66410dbc
+  730  docker rmi -f ce8f66410dbc
+  731  docker images
+  732  docker run -d -p 8082:8080 --name node-app2 manikandanramasamy/node-app:1.0.1
+  733  docker logs node-app2
+  734  docker login 
+  735  history 
+  736  docker images
+  737  history 
+  738  clear
+  739  docker run -d --name private -p 8000:5000 registry:2
+  740  docker run -d --name private1 -p 8000:5000 registry:2
+  741  docker run -d --name private5 -p 8000:5000 registry:2
+  742  docker ps private5
+  743  docker ps 
+  744  docker images
+  745  curl localhost:8000
+  746  docker logs private5
+  747  clear
+  748  docker tag manikandanramasamy/node-app:1.0.1 localhost:8000/node-app:1.0.1
+  749  docker push localhost:8000/node-app:1.0.1
+  750  curl localhost:8000/v2/_catalog
+  751  docker images
+  752  docker tag java-app manikandanramasamy/java-app:1.0.0
+  753  docker tag java-app localhost:8000/java-app:1.0.0
+  754  history
+  
+  
+  
+  /etc/host file    
+  
+  
+  
+  
+# Specify a base image
+FROM node:alpine
+
+WORKDIR /usr/app
+
+# Install some depenendencies
+COPY ./package.json ./
+RUN npm install
+COPY ./ ./
+
+
+# Default command
+CMD ["npm", "start"]
+
+
+  cd /docker
+  762  pwd
+  763  cd ..
+  764  ls
+  765  cd home
+  766  ls
+  767  cd labsuser/
+  768  ls
+  769  cd docker 
+  770  ls
+  771  docker ps
+  772  curl localhost:8000/v2/_catalog
+  773  docker stop private5
+  774  docker rm private5
+  775  curl localhost:8000
+  776  cd /var
+  777  cd lib
+  778  cd docker
+  779  ls
+  780  cd image 
+  781  ls
+  782  cd overlay2
+  783  ls
+  784  cd layerdb
+  785  ls
+  786  cd sha256
+  787  ls
+  788  ls -l
+  789  cd ..
+  790  cd /home 
+  791  ls
+  792  cd labsuser
+  793  ls
+  794  cd docker 
+  795  ls
+  796  mkdir private
+  797  cd private
+  798  pwd
+  799  cd /var/lib/docker/private
+  800  cd /var/lib/docker/
+  801  ls
+  802  mkdir private
+  803  cd private
+  804  pwd
+  805  docker run -d --name private6 -p 8000:5000 -v /home/labsuser/docker/private:/var/lib/docker/private registry:2
+  806  docker ps 
+  807  docker push localhost:8000/node-app:1.0.1
+  808  ls
+  809  cd ..
+  810  ls
+  811  cd private
+  812  ls 
+  813  curl localhost:8000/v2/_catalog
+  814  cd ..
+  815  ls
+  816  cd ..
+  817  ls
+  818  cd home 
+  819  ls
+  820  cd labsuser
+  821  ls
+  822  cd docker
+  823  sl
+  824  ls
+  825  cd private
+  826  ls
+  827  docker inspect private6
+  828  ls
+  829  pwd
+  830  ls -l
+  831  docker images
+  832  docker run -d -p 8082:8080 --name node-app2 localhost:8000/node-app:1.0.1
+  833  docker run -d -p 8082:8080 --name node-app3 localhost:8000/node-app:1.0.1
+  834  docker run -d -p 8085:8080 --name node-app5 localhost:8000/node-app:1.0.1
+  835  docker logs node-app5
+  836  ls
+  837  cd ..
+  838  ls
+  839  cd ..
+  840  ls
+  841  cd labsuser 
+  842  ls
+  843  cd docker
+  844  ls
+  845  cd private
+  846  ls
+  847  history 
+  
+  
+  
+    
+   docker ps 
+  900  clear
+  901  docker ps
+  902  docker stats
+  903  dodocker ps 
+  904  docker ps 
+  905  cd /home
+  906  ls
+  907  cd labsuser
+  908  ls
+  909  cd docker
+  910  ls
+  911  vi application.properties
+  912  ls
+  913  docker ps
+  914  docker cp node-app10:/usr/app
+  915  docker cp application.properties node-app10:/usr/app
+  916  docker exec -it node-app10 bash
+  917  docker exec -it node-app10 sh
+  918  docker cp node-app10:/usr/app/application1.properties .
+  919  ls
+  920  history
+  
+  
+  
+  
+  9  ls
+  920  history
+  921  clear
+  922  docker ps
+  923  docker inspect node-app10
+  924  ls
+  925  pwd
+  926  clear
+  927  ls
+  928  docker network ls
+  929  docker network inspect bridge 
+  930  ifconfig
+  931  docker ps
+  932  ifconfig
+  933  docker  ps
+  934  docker stop node-app1 
+  935  docker stop node-app2 
+  936  docker stop private6 
+  937  ifconfig                                     we will see veth as many container running
+  938  history
+  
+  
+  
+  
+  docker compose
+  
+   docker create network mynet
+   apt install docker-compose
+   
+  docker-compose.yaml
+  --------
+version: "2"
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    links:
+      - redis
+    networks:
+      - mynet
+  redis:
+    image: redis
+    expose:
+      - "6379"
+    networks:
+      - mynet
+networks:
+  mynet:
+  
+  
+  
+  
+  
+  
+  docker compose krke dekho k image banta hia ya nahi 
+  docker network k bare m dekho
+  2nd claas ka last 15 minute phir se dekho
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  3rd class
+  
+  ubectl get nodes
+  518  sudo su 
+  519  mkdir -p $HOME/.kube 
+  520  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  521  kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')
+  522  kubectl get nodes
+  523  sudo su 
+  524  mkdir -p $HOME/.kube 
+  525  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  526  kubectl get nodes
+  527  sudo -s
+  528  kubectl get nodes
+  529  kubectl get node
+  530  kubectl get po
+  531  mkdir -p $HOME/.kube   
+  532  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config   
+  533  kubectl get nodes
+  534  sudo su 
+  535  kubectl get nodes
+  536  mkdir -p $HOME/.kube 
+  537  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  538  kubectl get nodes
+  539  cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+
+  540  —------------------------------------------------------------
+  541  sudo systemctl enable docker
+  542  sudo systemctl daemon-reload
+  543  sudo systemctl restart docker
+  544  sudo swapoff -a
+  545  mkdir -p $HOME/.kube 
+  546  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  547  kubectl get nodes
+  548  kubectl get node
+  549  kubectl get pods
+  550  kubectl --v=5
+  551  sudo -s
+  552  sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+  553  kubectl get nodes
+  554  cd /opt
+  555  ls
+  556  cd cni
+  557  ls
+  558  cd bin
+  559  ls
+  560  cd ..
+  561  ls
+  562  cd ..
+  563  ls
+  564  cd ..
+  565  kdir -p $HOME/.kube
+  566  mkdir -p $HOME/.kube
+  567  kubectl get nodes
+  568  sudo mkdir /etc/docker
+  569  cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+
+  570  sudo systemctl enable docker
+  571  sudo systemctl daemon-reload
+  572  sudo systemctl restart docker
+  573  sudo swapoff -a
+  574  sudo su
+  575  kubectl get nodes
+  576  mv  $HOME/.kube $HOME/.kube.bak
+  577  mkdir $HOME/.kube
+  578  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  579  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  580  kubectl get nodes
+  581  clear
+  582  cls
+  583  clear
+  584  kubectl get namespace
+  585  kubectl get pods --ns kube-system
+  586  kubectl get pods namespace kube-system
+  587  kubectl get namespace kube-system
+  588  kubectl get po -n kube-system
+  589  ls
+  590  cd \docker
+  591  ls
+  592  ls -l
+  593  pwd
+  594  kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')
+  595  ls
+  596  cd /home
+  597  ls
+  598  cd labsuser/
+  599  ls
+  600  kubectl apply -f calico.yaml
+  601  kubectl get pods
+  602  kubectl get nodes
+  603  kubectl get po -n kube-system
+  604  kubectl get nodes
+  605  history
+  
+  
+  
+ mv  $HOME/.kube $HOME/.kube.bak
+mkdir $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+
+105  
+
+-	  106  ls -l
+-	  107  vi calico.yaml
+-	  108  ls
+-	  109  vi calico.yaml
+-	  110  kubectl apply -f calico.yaml
+-	 
+
+
+
+
+
+history
+  606  kubectl get pods --all-namespaces
+  607  kubectl get nodes
+  608  kubectl get namespaces
+  609  kubectl get nodes
+  610  clear
+  611  kubectl get nodes
+  612  kubectl describe no master
+  613  alias k=kubectl 
+  614  k describe node master
+  615  k api-resources
+  616  k get namespace
+  617  k get all -n kube-system
+  618  k get po -n kube-system
+  619  k get po -n kube-system -o wide
+  620  history
+  
+  
+  
+  
+  history
+  621  ls
+  622  pwd
+  623  cler
+  624  clear
+  625  pwd
+  626  k run node-app --image=manikandanramasamy/node-app:1.0.1 --port=8080
+  627  k get po
+  628  k get po -o wide 
+  629  k describe po node-app
+  630  k logs node-app
+  631  k exec -it node-app bash 
+  632  k exec -it node-app sh
+  633  history 
+-	 
+
+
+
+
+
+
+
+
+https://www.youtube.com/premium?acc=AHHVWTKN5P3G
+
+
+
+
+
+ k create deploy node-app --image=manikandanramasamy/node-app:1.0.1 --port=8080
+  839  k get po
+  840  k get all
+  841  k delete node-app
+  842  k delete deploy node-app
+  843  ls
+  845  k create deploy node-app --image=manikandanramasamy/node-app:1.0.1 --port=8080 -o yaml > node-app.yaml
+  846  vi node-app.yaml 
+  847  k create deploy node-app --image=manikandanramasamy/node-app:1.0.1 --port=8080
+  848  k get po 
+  849  k get all
+  850  k delete deploy node-app
+  851  clear
+  852  k create deploy node-app --image=manikandanramasamy/node-app:1.0.1 --port=8080 --dry-run=client -o yaml > node-app.yaml
+  853  vi node-app.yaml
+  854  k get all
+  855  k apply -f node-app.yaml
+  856  k get all
+  857  k edit deploy node-app
+  858  k get po
+  859  k get all
+  860  k edit deploy node-app
+  861  k get po
+  862  k edit deploy node-ap
+  863  k get po
+  
+node-app.yaml
+-----------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: node-app
+  name: node-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: node-app
+    spec:
+      containers:
+      - image: manikandanramasamy/node-app:1.0.1
+        name: node-app
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}
+
+
+
+
+k autoscale deploy node-app --min=2 --max=10 --cpu-percent=80
+  868  k get po
+  869  k get hpa
+  870  top command
+  871  top 
+  872  k delete hpa node-app
+  873  k get hpa
+  874  history
+~                                                                                                                                                                                           
+~                           
+ k create deploy nginx --image=nginx:latest --port=80
+  877  k get po
+  878  k scale deploy nginx --replicas=25
+  879  k get all
+  880  k rollout status deploy nginx
+  881  k rollout history deploy nginx
+  882  k set image deploy nginx ngnix=nginx:1.7.8 --record
+  883  k rollout status deploy nginx
+  884  k rollout history deploy nginx
+  885  k get all 
+  887  k set image deploy nginx nginx=nginx:1.7.9 --record
+  888  k rollout history deploy nginx 
+  889  k rollout status deploy nginx 
+  890  k rollout history deploy nginx 
+  891  k rollout undo deploy nginx
+  892  k rollout history deploy nginx 
+  893  k rollout undo deploy nginx --to-revision=2
+  894  k rollout history deploy nginx 
+  895  history
+~          
+
+   cd serviceDemo/
+  910  ls
+  911  ls -l
+  912  cd deploy/
+  913  ls
+  914  ls -l
+  915  vi db-pod.yml 
+  916  vi db-deployment.yml 
+  917  vi db-deployment.yaml 
+  918  vi db-svc.yaml
+  919  vi db-svc.yml
+  920  vi web-deployment.yaml 
+  921  vi web-pod.yaml 
+  922  vi web-svc.yaml 
+  923  vi web-svc.yml 
+  924  clear
+  925  k apply -f db-pod.yaml
+  926  k apply -f db-pod.yml
+  927  k get po -o wide
+  928  k delete deploy nginx
+  929  k get po -o wide
+  930  k delete deploy node-app
+  931  k get po -o wide
+  932  k apply -f db-svc.yaml
+  933  k apply -f db-svc.yml
+  934  k get all 
+  935  k apply -f web-pod.yaml
+  936  k get all
+  937  k apply -f web-svc.yaml
+  938  k apply -f web-svc.yml
+  939  k get all
+  940  k get all 
+  941  k get no -o wide
+  942  k describe svc web
+  943  k describe po web
+  944  k get all
+  945  curl 172.31.56.191:30773/init
+  946  curl -i -H "Content-Type: application/json" -X POST -d '{"uid": "1", "user":"John Doe"}' http://172.31.56.191:30773/users/add
+  947  curl -i -H "Content-Type: application/json" -X POST -d '{"uid": "2", "user":"Jane Doe"}' http://172.31.56.191:30773/users/add
+  948  curl -i -H "Content-Type: application/json" -X POST -d '{"uid": "3", "user":"Bill Collins"}' http://172.31.56.191:30773/users/add
+  949  curl -i -H "Content-Type: application/json" -X POST -d '{"uid": "4", "user":"Mike Taylor"}' http://172.31.56.191:30773/users/add
+  950  curl http://172.31.56.191:30773/users/1
+  951  curl http://172.31.56.191:30773/users/2
+  952  curl http://172.31.56.191:30773/users/3
+  953  curl http://172.31.56.191:30773/users/4
+  954  curl http://172.31.56.191:30773/users/5
+  955  history
+  
+  
+  git clone https://github.com/rskTech/serviceDemo
+                                                                                                                                                                                   
+~                  
+
+
+
+
+
+
+
+                                                                                                                                                                         
+pod deployment service<nodeport&clusterip> scheduling<controlling where podwill created>
+
+
+
+scheduling concept
+
+1.nodeselector
+ k get no --show-labels
+  959  k label no worker2 hdd=ssd
+  960  k get no --show-labels
+  961  k get po 
+  962  k run nginx --image=nginx --port=80 --dry-run=client -o yaml > nginx.yaml
+  963  vi nginx.yaml 
+  964  k explain po 
+  965  k explain po.spec
+  966  k apply -f nginx.yaml
+  967  k get po -o wide
+  968  k describe po nginx
+  969  history
+  
+     k get po -o wide
+  968  k describe po nginx
+  969  history
+  970  pwd
+  971  k label no worker2 hdd-                used to unlabel 
+  972  k get po -o wide
+  973  k label no worker1 hdd-
+  974  k get po
+  975  k delete po nginx
+  976  k apply -f nginx.yaml
+  977  k get po
+  978  k describe po nginx
+  979  history
+~                                                                                                                                                                                           
+~                
+~  k run nginx --image=nginx --port=80 --dry-run=client -o yaml > nginx.yaml                                                                                                                                                                                         
+~apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  nodeSelector:
+           hdd: ssd
+  containers:
+  - image: nginx
+    name: nginx
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}                                                                                                                                                                                           
+~                     
+
+
+..............................................................................................................................................
+
+
+
+
+
+
+
+
+
+
+
+import json
+import boto3
+
+# Initialize the DynamoDB resource
+dynamodb = boto3.resource('dynamodb')
+table_name = 'dbtable'  # Replace with your actual table name
+table = dynamodb.Table(table_name)
+
+def lambda_handler(event, context):
+    # Iterate over each record in the S3 event
+    for record in event['Records']:
+        # Get the S3 bucket and object information
+        bucket = record['s3']['bucket']['test456789000']
+        key = record['s3']['object']['key']
+        
+        # Process the S3 object, e.g., read its contents or perform some action
+        # For this example, we'll just assume it's a JSON file with log data
+        s3_client = boto3.client('s3')
+        response = s3_client.get_object(Bucket=bucket, Key=key)
+        data = response['Body'].read().decode('utf-8')
+        log_entries = json.loads(data)
+        
+        # Write log entries to DynamoDB
+        for entry in log_entries:
+            # Assuming each entry is a dictionary with 'timestamp' and 'message' fields
+            timestamp = entry['timestamp']
+            message = entry['message']
+            
+            # Write the log entry to DynamoDB
+            table.put_item(
+                Item={
+                    'timestamp': timestamp,
+                    'message': message
+                }
+            )
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Logs processed and written to DynamoDB')
+    }
+
+
+
+
+
+vi daemon.json in /etc/docker
+
+{
+    "exec-opts": ["native.cgroupdriver=systemd"]
+}
+Then
+
+ sudo systemctl daemon-reload
+ sudo systemctl restart docker
+ sudo systemctl restart kubelet
+ 
+ 
+ H33mFT2yhlYj1SmlK9hI1sq8Ee/OcoFbNGdqsAfe      egoOEXkKUhIg
+ 
+ Q. Can I use all the IP addresses that I assign to a subnet?
+
+No. Amazon reserves the first four (4) IP addresses and the last one (1) IP address of every subnet for IP networking purposes. 
+
+
+
+
+
+
+
+
+
+.....................................................................................................................................................
+
+
+Day5
+
+daemonset
+
+
+vi Daemonset.yaml
+ 1520  k apply -f Daemonset.yaml 
+ 1521  k get ds
+ 1522  k get ds --all-namespaces
+ 1523  k get ds --all-namespaces -o wide
+ 1524  k get all -o wide
+ 1525  k get ds -o wide
+ 1526  k describe ds fluentd-elasticsearch
+ 1527  k get ds -n kube-system -o wide
+ 1528  k get po -o wide 
+ 1528  k get po -n kube-system -o wide 
+
+
+k taint no master  <key>-   used to remove taint from master
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd-elasticsearch
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logging
+spec:
+  selector:
+    matchLabels:
+      name: fluentd-elasticsearch
+  template:
+    metadata:
+      labels:
+        name: fluentd-elasticsearch
+    spec:
+      containers:
+      - name: fluentd-elasticsearch
+        image: quay.io/fluentd_elasticsearch/fluentd:v2.5.2
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+
+
+
+
+
+
+......................................................................................................................................................
+
+JOB -obj type
+it is used to backup the logfile to another location so that our space gets freee
+
+job is done sequentially ... if we mention parallelism then it will get done parallellt
+
+
+ 
+ 1536  k create job myjob --image=ubuntu:20.04 --dry-run=client -o yaml -- /bin/sh -c "sleep 10" 
+ 1537  k get all
+ 1538  k create job myjob --image=ubuntu:20.04 --dry-run=client -o yaml -- /bin/sh -c "sleep 10" > job.yaml
+ 1539  vi job.yaml 
+ 1540  k apply -f job.yaml
+ 1541  k get all
+ 1542  watch kubectl get all
+ 1543  k get all
+ 1544  k delete myjob
+ 1545  k delete job myjob
+ 1546  vi job.yaml 
+ 1547  k apply -f job.yaml              here we mention parrallelism and completion to see how it is creating[completions: 10
+                                                                                                             parallelism: 3]
+ 1548  watch kubectl get all
+ 1549  k delete job myjob
+ 1550  vi job.yaml
+ 1551  k apply -f job.yaml 
+ 1552  watch kubectl get all 
+ 1553  k delete job myjob
+ 1554  vi job.yaml 
+ 1555  k apply -f job.yaml 
+ 1556  watch kubectl get all
+ 
+ vi job.yaml
+ 
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: myjob
+spec:
+  completions: 10
+  parallelism: 3
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - /bin/sh
+        - -c
+        - sleep 10
+        image: ubuntu:20.04
+        name: myjob
+        resources: {}
+      restartPolicy: Never
+status: {}
+
+
+
+..............................................................................................................................................
+CRONJOB
+cronjob - if we want to do any things like log backup etc at any fix time inetrval(say 12am)we will use cronjob
+
+crontab.guru will explain 5 star concept(*****)     
+note-we can use comma also to repeat the task in two diffrent days or monthor ours etc
+
+
+*/1 * * * *       at every minute
+
+
+ 1562  k create cj mycj --image=ubuntu:20.04 --schedule="*/1 * * * *" --dry-run=client -o yaml -- /bin/sh -c "sleep 10" > cj.yaml
+ We will get cj.yaml file after running above commandd
+ 
+ 1563  vi cj.yaml 
+ 1564  k apply -f cj.yaml
+ 1565  watch kubectl get all            we can watch conjob running according to set timing
+ 1566  k delete cj mycj
+ 1567  k expalin cj.spec
+ 1568  k expalin cj
+ 1569  k explain cj
+ 1570  k explain cj.spec
+ 1571  k explain cj.spec.jobTemplate
+ 1572  k explain cj.spec.jobTemplate.spec
+ 
+ 
+ ...............................................................................................................................................
+ CONFIGMAP
+ 
+ 
+ 
+ 1579  k create cm mycm --from-literal=DB_HOST=localhost --from-literal=DB_USER_NAME=admin --from-literal=DB_PWD=pwd
+ 1580  k get cm
+ 1581  k describe cm mycm
+ 
+ 1582  vi myconfig.ini
+myconfig.ini
+-----------
+DB_HOST=localhost
+DB_USERNAME=admin
+DB_PWD=pwd
+ 
+ 1584  k create cm mycm1 --from-file=myconfig.ini
+ 1585  k get cm mycm1
+ 1586  k describe cm mycm1
+ 
+ 
+ note:- mycm is made from (--from-literal) and mycm1 is made from myconfig.ini file
+ 
+ 
+ HOW TO MENTION MYCM IN POD SCRIPTS
+ 
+ k run nginx --image=nginx:1.17.8 --port=80 --dry-run=client -o yaml > ngnix.yaml       used to made nginx.yaml file
+ 1591  vi ngnix.yaml 
+ 1592  k apply -f ngnix.yaml 
+ 1593  k get po all
+ 1594  k get po 
+ 1595  vi ngnix.yaml 
+ 1599  k exec -it nginx /bin/sh      ander jake pod k andr env chalaenge to hamko wahan dikh jaega db_host
+ 
+ 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx:1.17.8
+    name: nginx
+    env:
+       - name: DB_HOST
+         valueFrom:
+              configMapKeyRef:
+                    name: mycm
+                    key: DB_HOST
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+
+
+ we can mention db_user name,db_password etc also 
+ after we will go inside the pod by using exec command.THen we run env ,and we can seee there also
+ 
+ this is a case mentioning two parameter.DB_HOST&DB_PWD
+ vi ngnix.yaml 
+ 1604  k get all 
+ 1605  k delete po nginx 
+ 1606  vi ngnix.yaml 
+ 1607  k het cm
+ 1608  k get cm
+ 1609  k describe cm mycm
+ 1610  vi ngnix.yaml 
+ 1611  k apply -f ngnix.yaml 
+ 1612  vi ngnix.yaml 
+ 1613  k apply -f ngnix.yaml 
+ 1614  k get all 
+ 1615  k describe po 
+ 
+ 
+ apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx:1.17.8
+    name: nginx
+    env:
+       - name: DB_HOST
+         valueFrom:
+              configMapKeyRef:
+                    name: mycm
+                    key: DB_HOST
+       - name: DB_PWD
+         valueFrom:
+              configMapKeyRef:
+                    name: mycm
+                    key: DB_PWD
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+ 
+ 
+ 
+   WE CAN MOUNT VOLUME WITH MY CONFIGMAP SO THAT WE CAN HAVE ACCESS OF OUR ALL KEY:VALUE MENTIONED IN CONFIGMAP INSIDE OUR APPLICATION  
+   
+   vi ngnix.yaml 
+ 1611  k apply -f ngnix.yaml 
+ 1612  vi ngnix.yaml 
+ 1613  k apply -f ngnix.yaml 
+ 1614  k get all 
+ 1615  k describe po nginx
+ 1616  history 
+ 1617  vi ngnix.yaml 
+ 1618  k get po 
+ 1619  k delete po nginx
+ 1620  clear
+ 1621  ls
+ 1622  vi ngnix.yaml 
+ 1623  k apply -f ngnix.yaml
+ 1624  vi ngnix.yaml 
+ 1625  k apply -f ngnix.yaml
+ 1626  k get po 
+ 1627  k describe po nginx
+ 
+ 
+ vi nginx.yaml
+ apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx:1.17.8
+    name: nginx
+    volumeMounts:
+                - name: myvol
+                  mountPath: /etc/test
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+          - name: myvol
+            configMap:
+              name: mycm1
+status: {}
+
+
+
+.............................................................................................................................................
+SECRET object
+
+
+it is used to store the valuable key:value credential secretely
+data will be encrypted
+base64 encoding is used
+it is same as configmap but configmap is a plan text and vulnerable 
+we can create secret with (--from-literal) as well as from file (same as in case of configmap)
+
+k create secret generic mysecret --from-literal=password=admin
+k get secret
+k describe secret mysecret 
+k get secret <nameofsecret>
+
+
+vi nginx.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx:1.17.8
+    name: nginx
+    env:
+       - name: DB_HOST
+         valueFrom:
+              secretKeyRef:
+                    name: mysecret
+                    key: DB_HOST
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+
+.............................................................................................................................................................
+
+
+https://github.com/manikandanramasamy1981/k8s_material/blob/master/practiceset:- step by step process to practice
+........................................................................................................................................................
+
+PV & PVC
+
+first create pv then pvc then attactch that with pod
+
+
+
+vi pv.yaml
+ 1950  k explain pv.spec.accessModes
+ 1951  vi pv.yaml
+ 1952  k explain pv.spec.storageClassName 
+ 1953  vi pvc.yaml
+ 1954  k get all
+ 
+ k apply -f pv.yaml
+ 1967  k get pv
+ 1968  k apply -f pvc.yaml
+ 1969  k get pvc 
+ 1970  ls
+ 1971  vi pv.yaml
+ 1972  k get pv
+ 1973  vi pvc.yaml
+ 1974  ls
+ 1975  vi nginx.yaml 
+ 1976  k get all
+ 1977  k apply -f nginx.yaml 
+ 1978  k get po 
+ 1979  k describe po ngnix
+ 1980  k describe po nginx
+ 1981  k describe pv mypv
+ 1982  k describe pv mypv -o wide 
+ 1983  k describe pvc mypvc
+ 
+
+vi pv.yaml
+apiVersion: v1
+kind : PersistentVolume
+metadata:
+  name: mypv
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: normal
+  capacity :
+    storage: 1G
+  hostPath:
+    path : /opt
+
+~                  
+
+vi pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+      name: mypvc
+spec:
+  accessModes:
+     - ReadWriteMany
+  storageClassName: normal
+  resources :
+    requests:
+      storage: 1G
+      
+      
+      
+vi nginx.yaml      
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  volumes:
+    - name: myvol
+      persistentVolumeClaim:
+        claimName: mypvc
+  containers:
+  - image: nginx
+    name: nginx
+    volumeMounts:
+      - mountPath: /etc/test
+        name: myvol
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+
+
+
+df -kh
+
+
+.............................................
+
+dynamic volume
+
+agar 100 cntainer hai to sabko ek ek krke nahi de sakte hain hence dynamic volume come in picture
+
+
+.....................................................................
+stateful set is an obj similar to deployment:-statefulset is sequential but in deployment its random
+
+in deployment
+when pod is made by replica.the pod id is random ex nginx55555,nginx595959
+when we delete the pod by decreasing the replica. random podis deleted
+one volume is shared by multiple pods
+
+
+in stateful set
+pod id is in sequence.ex.nginx01,nginx02,nginx03 etc
+when we scaleup or scaledown , it is sequential
+individual volume is allocated
+
+
+
+whenn to usewhat ?
+stateful set i sused whereever db instance is there 
+deployment is used for non db type of instance
+
+
+
+
+
+
+      
+cd k8s_material/
+ 2010  ls
+ 2011  cd statefulset/
+ 2012  ls
+ 2013  ls -l
+ 2014  vi sc.yaml 
+ 2015  k explain sc
+ 2016  ls
+ 2017  vi pv.yaml
+ 2018  vi pv1.yaml 
+ 2019  vi pv2.yaml 
+ 2020  vi sfs.yaml 
+ 2021  k delete po
+ 2022  k get all
+ 2023  k delete po nginx
+ 2024  k apply -f sc.yaml
+ 2025  k get sc
+ 2026  k apply -f sfs.yaml
+ 2027  k get all
+ 2028  k apply -f pv.yaml
+ 2029  k get pv
+ 2030  k delete pv mypv
+ 2031  k get pv
+ 2032  k get pvc
+ 2033  k delete pvc mypvc
+ 2034  k delete pv mypv
+ 2035  k get pv
+ 2036  k get pvc
+ 2037  k apply -f pv.yaml
+ 2038  k get pvc
+ 2039  k apply -f pv1.yaml
+ 2040  k get pvc
+ 2041  k apply -f pv2.yaml
+ 2042  k get all
+ 2043  k get pvc
+ 2044  history
+ 
+ 
+ git clone https://github.com/manikandanramasamy1981/k8s_material.git
+ 
+ pv.yaml 
+ ----------
+ apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: "my-storage-class"
+  local:
+    path: /opt
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - worker1
+          
+          
+pv1.yaml 
+----------
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv1
+spec:
+  capacity:
+    storage: 3Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: "my-storage-class"
+  local:
+    path: /opt
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - worker1
+          
+          
+pv2.yaml
+----------
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv2
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: "my-storage-class"
+  local:
+    path: /opt
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - worker2
+          
+          
+          
+          
+		  
+		  
+		  
+		  
