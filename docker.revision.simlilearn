@@ -1,0 +1,1119 @@
+NAMESPACE-                                                   providing unique address to container
+CGROUP-                                                      providing unique resources to container
+GVISOR-                                                      it is used to secure the container from any vulnerable attack
+monolithic VS microservice
+stateless VS statefull application
+Dockerfile
+docker build -t <imagename> .                                used to build image from Dockerfile
+docker inspect <imageid>                                     used to see the details of image and layered architecture of image.
+docker run -d --name=c1 -p 8000:8080 <imagename>             used to create container from images
+curl localhost:8000                                          it is used to access the application through cli
+docker logs <containername>                                  used to see the logs of the container
+docker exec -it <containername> bash                         used to go inside the container
+ps -f                                                        this command will display all the process running on the system
+docker stats                                                 it is used to see the resources used by each container
+docker cp <sourcefile> <containername>:/opt                  used to copy file from host machine to container
+docker cp <containername>:/opt/app.py .                      used to copy file from container to host machine (dot at last denotes the current directory)
+docker tag <imagename> <username>/<imagename>                used to tag image with username of dockerhub so that push can be done
+docker login
+docker push <username>/<imagename>                           used to push the image to dockerhub
+apt install vim -y                                           inside container there is limited utility , By deefault vi editor is not there
+docker inspect <containername>                               used to see the details of the container
+docker info                                                  used to know the details of docker daemon
+docker logs <containernamee/id>                              this command is used to see the logs of container
+
+python application = app.py
+
+
+
+from flask import Flask 
+import os 
+app = Flask(__name__) 
+@app.route('/') 
+
+def hello(): 
+    return ('\nHello from Container World! \n\n')
+
+if __name__ == "__main__": 
+    app.run(host="0.0.0.0", port=8080, debug=True)
+	
+	
+
+      
+Dockerfile
+
+FROM ubuntu:20.04
+RUN apt update && apt install python3 -y && apt install python3-pip -y && pip3 install flask
+COPY app.py /opt
+EXPOSE 8080
+CMD ["python3", "/opt/app.py"]
+
+
+
+
+
+
+
+
+                           
+
+DAY2
+DOCKER VOLUME
+
+volume attach from hostmachine to container makes the volume persistent. when container is deleted,the mounted volume will also get deleted as default.
+But that will still appers on host machine.And we can attach that volume to other container also
+
+
+
+docker run -d --name=c1 -p 80:80 -v /opt:etc/lala <imagename>     used to create container. And /opt folder from host machinec is mounted in /etc/lala in c1
+                             
+							 
+						                                            OR
+
+
+docker run -d --name=c1 -p 8080:8055 -v <nameofvolume>:<locationofcontainer> <imagename>       attaching volumes to container
+
+docker volume ls                              it will show all volumes present
+docker volume create <nameofvolume>           it is used to create new volume
+docker volume prune                           volume which is not attached to any container will be deleted
+docker volume inspect <nameofvolume>		  it is used to check the details of volume					
+docker volume rm                              it is used to delete specific volume					
+							
+
+
+COPY  in Dockerfile COPY is used to copy files from host machine to container
+ADD   in Dockerfile ADD is used to copy files from any remote location to inside the container
+
+
+
+
+
+CMD
+ENTRYPOINT
+
+FROM ubuntu:20.04
+CMD ["echo", "Hello World"]
+
+FROM ubuntu:20.04
+ENTRYPOINT ["echo", "Hello World"]
+
+FROM ubuntu:20.04
+ENTRYPOINT ["echo"]
+CMD ["Hello World"]
+
+
+  577  mkdir docker
+  578  ls
+  579  cd docker
+  580  ls
+  581  vi Dockerfile   
+  582  ls
+  584  docker build -t cmdimages .
+  585  docker images
+  586  docker run -d --name=c232 -P cmdimages
+  587  docker logs c232
+  588  docker rm c232 -f
+  589  docker run -d --name=c232 -P cmdimages echo "hello bihar"
+  590  docker logs c232 
+  591  docker rm c232
+
+
+  592  vi Dockerfile
+  593  docker images
+  594  docker build -t entrypointimage .
+  595  docker images
+  596  ls
+  597  docker run -d --name=c232 entrypointimage
+  598  docker logs c232
+  599  docker rm c232
+  600  docker run -d --name=c232 entrypointimage "hello darbhanga"
+  601  docker logs c232
+  602  docker rm c232
+  
+  
+  604  vi Dockerfile
+  605  docker build cmdentrypointboth .
+  606  docker images
+  607  docker build -t cmdentrypointboth .
+  608  docker images
+  609  docker ps
+  611  docker run -d --name=c232 -P cmdentrypointboth
+  613  docker logs c232
+  614  docker rm c232
+  615  docker run -d --name=c232 -P cmdentrypointboth "hello fazeelat colony"
+  616  docker logs c232
+  
+  
+  
+  PRIVATE REGISTRY
+  
+ more security
+ more speed
+ 
+ docker run -d --name pvt -p 5000:5000 registry                           private registry runs on port number 5000
+ docker images
+ docker tag first localhost:5000/first                                    command to tag image before pushing to private registry
+ docker images
+ docker push localhost:5000/first                                         command to push any image into private registry
+ docker pull localhost:5000/first                                         command to pull image from private registry
+ curl localhost:5000/v2/_catalog                                          this is used to see the image in private registry
+
+
+docker run -d --name=pvt -p 5000:5000 -v /opt:/var/lib/registry registry     used to make pvt container as well as mounting the volume.
+                                                                             In this case after deleting the registry container we will not loose our images.
+
+
+
+
+
+NOTE - we can tag our image with the IP address of host machine on which private registry is running,DNS name can be used also.
+so that the other developers can use our private registry to push and pull the images
+
+
+
+DOCKER NETWORKING
+
+
+1 bridge (default network)
+2 host (ip of host and ip of container is of same network)
+3 none (no ip is given to container, usedd for malicious reserach)
+
+
+root@ip-172-31-39-235:/home/ubuntu# docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+ef03ec498274   bridge    bridge    local
+9b543e228692   host      host      local
+3fdfa05f0b08   none      null      local
+
+
+docker network inspect <networkname>                                                   Used to see the details of network
+docker network create <nameofnetwork> --subnet 192.168.0.0/16                          Command to create the custom network and giving subnet Id also
+docker run -d --name=c1 -p 80:80 -v /opt:etc/lala --network=<networkname> <imagename>  Command to create container in any specific network
+apt-get update && apt-get install -y iputils-ping                                      If ping command is not working in any container.
+                                                                                        Then we need to install iputils-ping utils.
+
+
+
+
+DAY3 DOCKER COMPOSE
+
+With the help of BUILD command we can create single image from Dockerile at a time.
+With the help of RUN command we can create single container from  image at a time.
+
+Lets suppose we are working on voltha project which is having 40 plus microservices,it is not possible to run these BUILD and RUN command 40 plus time.
+Here docker compose comes in picture 
+
+note:-voltha project is related to wifi provider.How to manage the bandwidth for diffrent users n all.
+
+
+docker-compose -f <composefilename> build     used when we want to build only image from COMPOSEFILE
+docker-compose -f <composefilename> up -d     used when we want to run container from COMPOSEFILE
+docker-compose -f <composefilename> down      used when we want to down the container created from COMPOSEFILE
+
+
+
+
+CONTAINER ORCHESTRATION
+   DOCKERAWARM
+   K8S
+   OPENSHIFT
+   EKS                    elastic k8s service by amazon
+   AKS                    assure k8s service by microsoft
+   GKE                    google k8s engine by google
+   MESOS
+   RANCHER
+   DIGITAL OCEAN.
+   
+   
+DOCKERSWARM
+
+  create      Create a new service
+  inspect     Display detailed information on one or more services
+  logs        Fetch the logs of a service or task
+  ls          List services
+  ps          List the tasks of one or more services
+  rm          Remove one or more services
+  rollback    Revert changes to a service's configuration
+  scale       Scale one or multiple replicated services
+  update      Update a service
+  
+  demote      Demote one or more nodes from manager in the swarm
+  inspect     Display detailed information on one or more nodes
+  ls          List nodes in the swarm
+  promote     Promote one or more nodes to manager in the swarm
+  ps          List tasks running on one or more nodes, defaults to current node
+  rm          Remove one or more nodes from the swarm
+  update      Update a node
+  
+
+
+
+docker swarm init                   take the join command from here and run on each workers to make the cluster
+docker swarm join-token worker      we can get join command with the help of ths coomand in case we lost it
+docker node ls                      used to see the list of workers in the cluster
+docker service ls                   used to see the list of services running
+
+
+
+
+two types of service
+      1. global service         it is going to create service on each nodes
+	  2. replicated service     it is going to create service acc to availability of resources on nodes
+	  
+docker service create --name=myweb --replicas=3 nginx            used to create a service having name as myweb and no of replicas as 3      
+docker service ls                                                used to see the list of services	  
+docker service inspect myweb                                     used to see the details of service
+docker service ps <nameofservice>                                used to see the all replicas running on diffrent nodes                           
+docker service rm <nameofservice>                                used to remove the services
+
+
+
+
+docker service create --name=<nameofservice> --mode=global nginx        This command is used to create service of global mode.
+                                                                        in which we need not to provide number of replicas
+                                                                        this will automatically assign one containers on each nodes
+																		
+																		
+
+																		
+																		
+DOCKERSWARM NETWORKING
+we have seen how to manage network of single container.
+now we will see the concept of OVERLAY network used to manage cluster
+
+by default one default overlay network is created once we setup a cluster 
+
+
+docker network create -d overlay <networkname>                                                      this command is used to create custom overlay network
+docker network inspect <networkname>                                                                this command is used to see details of network
+docker service create --name=<nameofservice> --publish target=80,published=80 --replicas=5 --network=<networkname> nginx 
+                                                                                                    this command is used to create service-
+																									in any specific network with pusblish port.
+                                                                                                   target port = port on which container is running 
+																								   published port = port on which host machine is bounded
+
+LOCKING OF CLUSTER BY MANAGER NODE
+
+docker swarm update --autolock=true                               by using this command our cluster will get locked and we will get one key
+systemctl restart docker                                          after locking we need to restart the docke
+docker service ls                                                 it will ask for key to perform any action on cluster
+docker swarm unlock                                               after using this command it will ask for key 
+docker service ls                                                 now we can perform operation on cluster
+docker swarm unlock-key                                           by using this command we will get our key back if lost
+
+docker swarm update --autolock=false                              this command is used to remove the lock from the cluster 
+systemctl restart docker                                          after removing the lock we will restart the docker again
+
+
+CONCEPT OF DRAIN
+
+
+docker node update --availability drain <ipaddressofnode>        By using this command the node having concerned ip will get drained
+                                                                 and the container running on that node will get shifted to other node
+																 generally used during maintainance of node
+
+docker node update --availability active <ipaddressofnode>       By using this command we can undrain our drained node
+				
+				
+				
+				
+docker service inspect <nameofservice>                           It is used to see the details of service in json format.
+docker service inspect --pretty <nameofservice>                  It is used to see the details of service in normal and easy format.	
+			
+
+
+
+
+DOCKERCOMPOSE- It will deploy multiple application through single click on one host
+DOCKERSTACK-It will deloy multiple application through single click on multiple host
+
+
+vi compose.yaml
+docker-compose config                          It is used to check weather our docker compose file is valid or not.
+docker-compose -f <composefilename> build      It is used to make image from docker compose file.
+docker-compose -f compose.yaml up -d           command to make containers up from dockercompose file , multiple container at a time
+docker-compose -f compose.yaml down            command to make containers down from dockercompose file , multiple container at a time
+docker push <taggedimage>		               command to push image in private registry
+curl localhost:5000/v2/_catalog                command to see the list of images in my private registry
+
+
+Note- docker compose -up command will create image also. But stack concept will not create image. There should be image available for stack.
+
+
+
+docker stack deploy --compose-file=compose.yaml <nameofstack>                        This command is used to deploy the stack with docker-compose file 
+docker stack ls
+docker stack rm <nameofstack>
+docker stack services <nameofstack> or docker service ls                             This command is used to see the list of created stack
+
+Note- with the help of docker stack we have created multiple services
+
+docker run=     one container on one host
+docker service= multiple container on one host
+docker compose= multiple container on one machine
+docker stack=   multiple container on multiple machine
+
+
+SCALEUP AND SCALEDOWN
+
+
+
+docker service create --replicas=3 --name=<nameofservice> <imagename>    Command to create a service having three replicas
+docker service scale <nameofservice>=7                                   3 se badh 7 replica hojaega
+docker service scale <nameofservice>=2                                   3 se ghat k 2 replica ho jaega 
+
+
+
+                      
+
+
+DOCKERVOLUME
+
+docker volume ls
+docker volume create
+docker volume rm
+docker volume prune
+docker volume inspect
+
+
+docker volume create <volumename>                                                           Volume will be created
+
+docker run -d --name=c0 -p 80:8520 -v <volumename>:/etc/lala                                Volume will get attached to c0 container on /etc/lala 
+                                           or
+docker run -d --name=c0 --mount src=<volumename>,dst=/etc/lala <imagename>                  This approach will also do same as -v was doing
+docker run -d --name=c0 --mount type=tmpfs,dst=/etc/lala <imagename>                        This command is used to make temporary file in our container 
+                                                                                             which is not having any backup on host machine
+																						
+																				
+																						
+																						
+																						
+																						
+VOLUMEMOUNT IN SWARM CLUSTER  
+
+vi /etc/docker/daemon.json
+
+{
+   "storage-driver": "aufs",
+   "data-root": "/opt",
+   "dns": ["8.8.8.8","8.8.4.4"]
+ }
+
+
+
+systemctl restart docker             Restart the docker after saving daemon.json file
+systemstl status docker              It must be in running mode
+docker volume create vol1            vol1 will be created which will be mounted with containers
+
+docker create service -d --replicas=5 --name=myservice --mount src=vol1,dst=/ak47 nginx             we will get content of vol1 in /ak47 inside container   
+
+mount                                           if we go inside the container and run mount command then we will get the list of mount path
+
+
+
+
+LABELLING OF NODE 
+docker node update --label-add key:value <ip of node>            This command is used to label the nodes with key value pair for identification purpose
+docker node inspect <ip of node>                                 In the details of node we will see that key value pair
+
+
+
+
+
+
+DIFFRENCE  BETWEEN DOCKER CE(comunity edition) & DOCKER EE(enterprise edition)
+
+
+docker CE
+     open source
+	 update in every 7 month
+	 any challenge comes in between 7 month will be handled by ourself so it is vulnerable
+	 apache 2.0 licence is available
+	 we need to be expert in CLI to work with docker CE
+	 
+	 
+
+docker EE
+     paid
+	 regular updates will be available
+	 UCP (universal control plane) will be available. It is a type of UI available
+	 UTR (docker tusted registry). Type of private registry
+	 no need to be expert in CLI
+	 
+	 
+	 
+	 
+advantage of docker 
+  we need not to install anything to use docker swarm. We just need to install docker in our machine and by initialising the machine (docker swarm init)
+  we can make cluster and do our work
+
+disadvantage of docker  
+   docker swarm is tightly coupled with docker container and images. Doesnot work with pod and other type of services. 
+   Here k8s comes in picture which work with every type of container 
+   
+   
+   
+   
+   
+   
+KUBERNETES
+
+     it is modular in nature as it supports all types of containers  
+     it is complex in comparision with swarm
+     it is capable of doing complex task on industry level
+      
+k8s is opensource by (GOOGLE)
+OPENSHIFT is paid version by (REDHAT)   note- redhat ka kaam hi hai opensource ko customised kerke bechna.
+    
+	
+	
+	
+	MASTER Components                                                                                            
+	
+	API SERVER  It is responsible for communicating with kubelet etcd scheduler as well as controller                      
+	ETCD        It is  kind of storage which stores value in key:value format                                                                                              
+	SCHEDULER   It find best nodes to create container as per availability of resources                                                                                    
+	CONTROLLERb It is responsible for making DESIRED=CURRENT    
+	
+	
+
+    NODE Components
+	
+	DOCKER 
+	KUBELET 
+	
+	
+	Components responsible for networking 
+	1.kubeproxy
+	2.CNI(container networking interface)  eg:calico,weave
+	
+	
+	
+
+tools for making k8s cluster
+kubeadm                    it is used by simplylearn sir
+minikube                   it is used by bhupinder sir
+KIND(k8s inside docker)	   with the help of this we can setup k8s cluster inside single machine.
+	
+	
+MAKING OF K8S CLUSTER with kubeadm
+install kubeadm,kubelet and docker on each of the nodes
+kubeadm init                                               Run this command on the node which will be our master. 
+                                                           After running this, all major four components of master will be created internally.
+														   And it will provide join command.
+
+MAKING OF K8S CLUSTER with kind
+   go to github repo     k8s_material/kind_cluster_setup.txt	
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+changing the name of master and worker o identify easily
+hostnamectl set-hostname master               name of the machine will get changed to master
+
+hostname master/worker1/worker2
+vi /etc/hostname                   replace the ip with the name given
+bash 
+
+apt install docker.io
+apt install kubeadm
+apt install kubelet
+
+kubeadm init --pod-network-cidr=<cidrrange>               This command is used to initialise the master node and assign the cidr range of the cluster.
+kubeadm reset                                             This command is used to reset the kubeadm.Used for deleting the cluster use this when require
+
+kubectl get nodes                                      used to see the worker nodes attached with manager
+kubectl get nodes -o wide                              used to see more details of our nodes.       
+kubectl run <namofpod> --image=ubuntu --port=8080      used to create pod from image
+kubectl run <nameofpod> --image=ubuntu --port=8080 -n <namespace>     used to create pods in specific namespace 
+kubectl get pods -n kube-system                        used to see the major four components of master node. Apart from those four others pods are also present.
+kubectl get pods -o wide                               used to see all pods with more information.
+kubectl get pods -n kube-system -o wide                used to see the pods inside kube-system namespace with extra information
+kubectl describe pods <nameofpod>                      used to see the detail of pod
+kubectl describe node <IPofnode>                       used to see the details of node
+kubectl logs <nameofpod>                               used to see the logs detail of pod
+kubectl exec -it bash <nameofpod>                      used to go inside the pod
+kubectl delete pods <nameofpod>                        used to delete the pod 
+kubectl api-resources                                  used to see the all api-resource and their shortnames
+ps-ef                                                  used to list out the running processes on machine(its a linux command)
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+NAMESPACE -                        It is used to avoid the naming convention. 
+                                   If same name of container or microservice need to be deployed then we can group them in seperate namespace.
+								   
+kubectl get namespace              used to see the list of namespace available in our cluster
+kubectl create namespace <xyz>     used to create the custom namespace.
+
+
+kubectl api-resources                        It is used to get long list of all api-resources available.
+kubectl get all -n <nameofnamespace>         used to see the all object of namespace including pod deployment service etc
+kubectl get nodes -n <nameofnamespace>       used to see the nodes running in namespace
+
+
+kubectl run <namofpod> --image=ubuntu --port=8080 --dry-run=client -o yaml > pod.yaml    used to create our own yaml file
+vi pod.yaml                                                                              our yaml file will be shown
+kubectl apply -f pod.yaml                                                                used to create pod from yaml file
+
+
+
+
+
+HIGH AVAILABILITY OF POD
+
+deloyment object 
+
+
+kubectl create deploy <nameofdeployment> --image=nafees007/image2 --port=8080 --dry-run=client -o yaml > deploy.yaml
+                                                       This command is used to create our deployment yaml file template.
+													   Note-deployment yaml k ander replica wagairah rehta hai.
+	
+vi deploy.yaml                                         Our deploy.yaml file will be seen. And we can use it as template.
+kubectl apply -f deploy.yaml                           This command is used to apply the deployment using deploy.yaml
+kubectl get deploy                                     This command is used to see the list of deployment
+kubectl get all                                        This command is used to see the list of deployment and list of pods running.
+                                                       As well as many information also.                                
+
+
+
+SCALING OF REPLICAS
+
+kubectl scale deploy <nameofdeployment> --replicas=5  Used to scale up or scale down the no of replicas in deployment.
+
+
+Note - If we want to delete the pod permanently then we need to delete the deployment.After deleting the deployment everything will be deleted.
+       But if we only delete the pod then it will be automatically created due to high availability feature.Desired=Current is maintained by replica.
+	   
+	 - As we have seen in docker swarm that pod is created on worker node as well as on master node also.
+	   But in k8s we see that the pod is only created on worker nodes only.It hapens because by default in k8s the worker node is having taint.
+	   
+	   
+	   
+	   
+ZERO DOWNTIME UPGRADE
+
+Lets say we r having one application which is running. Someday we got new UI for our application.
+We can deploy that UI in our application without getting any downtime.If we dont want that upgrade then we can rollout to previous version also.
+         We will use kubectl set image command for upgrade.. 
+		 We will use kubectl rollout undo for rolling out.
+         We will use kubectl rollout history to see the history of rollout.
+		 
+		 
+Understanding the concept of upgrade and rollout with the help of example
+
+k create deploy nginx --image=nginx:latest --port=80
+k get all
+k scale deploy nginx --replicas=25                           Lets scale the replica to 25 so that we can observe what is happening
+k get all
+k set image deploy nginx nginx=nginx:1.7.8                   This command is used to upgrade our image with new version without any downtime
+k get po
+k describe po nginx-585449566-xl5lw                          By describing the pod we will see that our pod is running on nginx:1.7.8
+k rollout history deploy nginx                               This command is used to see the history of image we have used so far
+k set image deploy nginx nginx=nginx:1.7.9 --record          this command will upgrade our image to nginx:1.7.9 without any downtime. 
+                                                                As we r using --record here it means we r going to see the history clearly-
+															    when we will run the command kubectl rollout history deploy nginx.
+k rollout history deploy nginx
+k get po
+k describe po nginx-56db85c5db-w7xkp                         If we describe our pod we will see that our pod is now running on image 1.7.9
+k rollout history deploy nginx
+k rollout undo deploy nginx                                  By using this command we will rolback our application on previous version.
+k rollout history deploy nginx 
+k get po
+k describe po nginx-6c969b87df-xsbwn                         Now after describing our pod we will see that our pod is shifted to previous version.
+k rollout undo deploy nginx --to-revision=1                  This command is used to shift our application to that version on which we want to shift manually
+ 
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SERVICE OBJECT
+
+As we know that when we delete any pod then due to HA it will be created again with new name and new IP address.
+Then the end user does not know the new details of pod. This ia the point where service came in picture.
+Because service will provide extra layer due to which our pods will be used accordingly.
+
+There are two types of service. 
+      1. Cluster IP   It is used when we want to access our application from inside the cluster
+      2. NodePort	  It is used when we want to access our application from outside of the cluster
+	  
+	  In realtime env, we use Cluster Ip to connect DB with UI bacause we need not to expose our DB with external world.
+	  But we will use NodePort to connect our UI because our UI need to connect with external environment.
+	  
+	  
+	  
+use this project to get better understanding
+    https://github.com/rskTech/serviceDemo.git
+	 
+	 
+	 
+git clone https://github.com/rskTech/serviceDemo.git
+cd serviceDemo/build/
+ls
+vi app.py 
+cd ..
+cd deploy/
+vi db-pod.yml 
+vi db-svc.yml 
+vi web-pod.yaml 
+vi web-svc.yml 
+k get all
+k apply -f db-pod.yml 
+k get po 
+k apply -f db-svc.yml 
+k get all
+k apply -f web-pod.yaml 
+k get all
+k apply -f web-svc.yml 
+k get all
+k get no -o wide
+
+curl 172.31.11.190:30153/init                                               Take any of the node ip because NodePort and ClusterIP work on whole cluster.
+                                                                            This command is used to iinitialise our DB
+curl -i -H "Content-Type: application/json" -X POST -d '{"uid": "1", "user":"John Doe"}' http://172.31.11.190:30153/users/add      Adding a user1
+curl -i -H "Content-Type: application/json" -X POST -d '{"uid": "2", "user":"Bob"}' http://172.31.11.190:30153/users/add           Adding one more user2
+curl 172.31.11.190:30153/users/1                                                                                                   Accessing user1 
+curl 172.31.11.190:30153/users/2                                                                                                   Accessing user2
+curl 172.31.11.190:30153/users/3                                                                           Accessing user3 but we will not get any user because 
+ 
+                                                                                                           user3 is not in our DB
+ --------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+TAINT & TOLERATION
+
+
+Lets us consider we have 100 nodes available in which only 5 is having SSD memory attached. 
+If we apply an application then our scheduler will create the pod on any of the 100 nodes as per the availability of the resources.
+But if we want to run our application on those 5 nodes having SSD memory attached then this Taint & Toleration concept will work.
+
+
+Taint will be added on Node itself. It is considered as a LOCK
+Toleration will be added in pod defination.It is considered as a KEY
+
+
+
+TAINT EFFECT
+
+key:value:TaintEfect
+
+There are three types of taint efect
+1.No Schedule            If taint & toleration does not get matched then dont schedule that pod on that node.But existing pod will keep running.
+ 
+2.Prefer No Schedule     If taint & toleration does not get matched then try not to schedule that pod on that node.
+                         But if there is no any options available then schedule that pod on that node.
+                         And the existing pod will continue to run. 
+						  
+3.No Execute             If taint & toleration does not get matched then dont schedule the pod on that node. Even dont allow to run the existing pod.
+                         Remove the existing pod and schedule on that node which is not having any taint.If that resource is not available then that pod       
+						 will be terminated.
+						 
+						 
+						 
+
+
+kubectl taint node <nameofthenode> key:value:TaintEffect                 Command used to attach taint on any node.	
+kubectl taint node <nameofthenode> key-                                  Command used to remove taint on any node.
+
+kubectl decribe node <NodeName>                                          In the detail we can see the taint is attatched to it or not.
+
+kubectl cordon <nameofthenode>                                           By using this command scheduling of node will be diabled.
+                                                                         No any scheduling of pod will happen on this node.
+																		 
+kubectl uncordon <nameofthenode>                                         By using this command scheduling of node will be enabled.
+                                                                         Scheduling of pod will be available on this node now.						                												 
+																		 
+Note:- 
+Lets say we have one master and two worker node.Master node is already have default taint.
+If we add taint on worker 1 and disable the pod scheduling on worker2.
+After that if we try to create a pod then it will be shown in pending state. 
+It happens because master as well as worker1 is having taint and worker2 is cordoned by disabling the sheduling of newly created pod.
+
+kubectl describe pod <podname>   in case of pending state of the pod.We can see the details why we r not having any noddes available to schedule the pod.
+                                 o/p- master is having taint,worker1 is having taint and worker2 is unscheduled.
+								 
+								 
+								 
+ADDING TOLERATION IN POD
+
+If we want to add toleration on our pod then we will add it is pod.yaml file
+
+vi pod.yaml
+  
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: first
+  name: first
+spec:
+  tolerations:
+    - key: hdd
+      operator: Equal
+      value: ssd
+      effect: NoSchedule
+  containers:
+  - image: rajendrait99/simplilearn:1.0
+    name: first
+    ports:
+    - containerPort: 8080
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+				
+				
+				
+After ading the Toleration. This pod can be created on the node which is having taint of same key:value:TaintEfect
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+DRAIN CONCEPT IN K8S
+
+When we drain the node, the pods running on that node will get deleted permanently if it is stand alone pods.
+If that pod is of HA mode then it will get created on any other nodes based on availability of resources.
+After the node get drained, it become unschedulable for new pods.
+
+
+Drain is used during maintainence work.
+
+kubectl drain <nameofnode> --ignore-daemonsets --force           This command is used to drain the node.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CONCEPT OF DAEMONSET
+
+
+It is similar to deployment.
+It is used when we want one pod on each available node.
+if we have 5 nodes available.Then daemonset will create one pod on each node of HA type.
+ex:- Used in monitoring or logging purpose.
+
+
+
+Note:- Daemonset will create the pod on cordened/unscheduled node also
+
+
+
+
+vi ds.yaml   (This ds.yaml is taken from kubernetese.io) 
+
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd-elasticsearch
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logging
+spec:
+  selector:
+    matchLabels:
+      name: fluentd-elasticsearch
+  template:
+    metadata:
+      labels:
+        name: fluentd-elasticsearch
+    spec:
+      tolerations:
+      # these tolerations are to have the daemonset runnable on control plane nodes
+      # remove them if your control plane nodes should not run pods
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: fluentd-elasticsearch
+        image: quay.io/fluentd_elasticsearch/fluentd:v2.5.2 
+		
+		
+		
+kubectl apply -f ds.yaml                    This command is used to deploy daemonset.
+ 
+ 
+ 
+ 
+Run these command for better understanding.
+k get ds -n kube-system
+k get po -n kube-system -o wide
+  
+  
+  
+------------------------------------------------------------------------------------------------------------------------------------------------------------  
+
+PERSISTENT VOLUME & PERSISTENT VOLUME CLAIM
+
+PV is the volume attatched to the pods.Lets say we have 5 pods and those 5 pods will have 1GB 2GB 3GB 4GB 5GB volumes attatched.
+Lets say we need 4GB volume for our application.Then PVC will search for that pod which is having 4GB volume attatched.
+
+
+There is no imperative coomand to use PV & PVC.
+We need to write yaml file for both of them.
+
+
+vi pv.yaml
+
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+   name: mypv
+spec:
+    storageClassName: normal
+    accessModes:
+            - ReadWriteMany
+    capacity:
+            storage: 1G
+    hostPath:
+         path: /opt
+
+
+
+kubectl apply -f pv.yaml                           Command to create PV.
+
+kubectl get pv                                     Command to see the list of PV and the detail of that PV.
+                                                   RECLAIM POLICY=RETAIN means if pod get deleted then PV will be retained.
+												   RECLAIM POLICY=DELETE means if pod get deleted then PV will also get deleted.
+												   
+												   
+vi pvc.yaml
+
+  
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+      name: mypvc
+spec:
+   accessModes:
+            - ReadWriteMany
+   storageClassName: normal
+   resources:
+           requests:
+                   storage: 1G
+  
+  
+kubectl apply -f pvc.yaml                          Command to create PVC
+kubectl get pv                                     Now we will see that status of PV will get changed from available to bound.
+
+
+
+Mounting of volume in pod. We will now change pod.yaml with PVc details
+
+vi pod.yaml 
+												  
+  
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: first
+  name: first
+spec:
+  containers:
+  - image: rajendrait99/simplilearn:1.0
+    name: first
+    ports:
+    - containerPort: 8080
+    resources: {}
+    volumeMounts:
+            - name: myvol
+              mountPath: /etc/lala
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+          - name: myvol
+            persistentVolumeClaim:
+                    claimName: mypvc
+status: {}
+
+
+k apply -f pod.yaml                            Command used to create pod with PVC
+k get pods                                     we will get the list o pods available
+k exec -it <podname> bash                      Go inside the pod. Now check /etc/lala.We will get the the file present on /opt
+
+Note:- Same PVC can be mounted on multiple pods.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+CONFIGMAP CONCEPT
+
+
+If we want to deploy an application then we need to follow some process like:-
+
+Write a docker file
+Built the image
+Push that image on registry
+arrange all dependency file
+pull the image from registry
+Deploy the application
+
+But when we have some change in our application then we need to follow all the above process from scratch whih is hectic.
+
+Here concept of ConfigMap came in picture in k8s.
+ConfigMap is a k8s object.
+
+ConfigMap is an k8s object which is binded on pod.Just change the configuration of application in ConfigMap and restart the pod.
+
+
+
+creating ConfigMap:-
+
+vi config.ini
+
+logfile=myapp.log
+DBHOST=192.168.0.5
+DBNAME=employee
+DBPASS=admin
+
+note:- we can use (--from-literal also to mention attributes one by one)
+
+
+
+kubectl create cm <nameofconfigmap> --from-file=config.ini                Command to create ConfigMap from config file.
+kubectl get cm                                                            Command to see the list of ConfigMap.
+kubectl describe cm <nameofconfigmap>                                     Command to see the details of config file.
+
+After creating ConfigMap. We will change persistent volume claim from configmap.
+
+  
+  
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: first
+  name: first
+spec:
+  containers:
+  - image: rajendrait99/simplilearn:1.0
+    name: first
+    ports:
+    - containerPort: 8080
+    resources: {}
+    volumeMounts:
+            - name: myvol
+              mountPath: /etc/lala
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+          - name: myvol
+            configMap:
+                    name: mycm     #mycm is the nameofconfigmap
+status: {}
+
+
+
+Then we will restart our pod
+then go to /etc/lala
+ls
+we will see config.ini inside that.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Certification course from CNCF 
+
+CKA    Certified k8s Administrator              cluster management part
+CKAD   Certified k8s Application Developer      more inclined on application deployment side
+cka ckad exercisegithub                          we can get questions of these exams from github
+cka or ckad exam preparation medium              we  will get blog which will give me the experience from other people who attended already
+Both of them have 70% same syllabus
+Cost=375$
+No of question=19
+Time=120 minutes
+Passing Percentage=74%
+certificate vality=   3 yrs
+keep watch the website = discount aate rehta hai ... december m jyada aata hai
+website of linux foundation to purchase the exams=     https://trainingportal.linuxfoundation.org/catalog
+
+
+STUDY MATERIALS
+
+go to chrome
+rajendra github
+go to k8s_matrial        Under this we can explore many study materials related to docker and k8s.
+
+
+
+
+Tools required to know if you want to work in Devops.
+
+DOCKER
+K8S
+Git
+Github
+Ansible
+Jenkins
+Terraform
+Nagios
+Shell
+Python
+AWS
+
+
+
+
+
+
+
+Command to setup weave cni plugin for networking in k8s cluster
+kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+
+
+
+
+
+
+				
+
+
+								 
+	docker system df                command to see the resources used by docker
+    df      or    df -H             command to see the resources used by system (-H is used to see in human readable format)
+    docker system prune
+    docker system prune -a
+    ps -ef                              
+    top
+    docker volume prune	
+	du 
+    df -a
+	df -al
+	df -ah             h for human readable format
+	df -output          this will show the types off filesysyem
+	df -Th                 types of file system is shown in human readable format
+    df -i             it will show the inodes
+	df -ih             inodes will be shown in human readable format
+	
+	df -kh                 human readable format
+	df -h --total            it will show the entire total memory and its allocations[--total is a kind of flag]
+	df -B or --block-size        
+	df -B -1G                   displayed in gb format
+	df -B -1M                   mb format
+	df -B -1K                   kb format
+	df -h /etc                   can be sued to see didk space in particular file
+	df /                         it will show u details of root 
+	
+	
+						 
+
+
+	  
+	  
+	  
+	  
+	  
+
+	  
+	   
+	   
+
+													   
+													   
+													   
+
+	
