@@ -1,0 +1,194 @@
+k8s cluster code on amazon linux
+
+
+yum install docker
+systemctl start docker
+systemctl enable docker
+
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/repodata/repomd.xml.key
+exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
+EOF
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+sudo systemctl enable --now kubelet
+
+systemctl start kubectl
+systemctl enable kubectl
+systemctl status kubectl
+
+command for calico cni
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml -O
+
+kubectl apply -f calico.yaml
+
+
+
+
+
+
+
+
+
+
+
+
+installing kubeadm cluster on ubuntu 22.04
+
+
+sudo apt-get update
+# apt-transport-https may be a dummy package; if so, you can skip that package
+sudo apt-get install -y apt-transport-https ca-certificates curl
+
+
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+
+# This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+
+
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+
+sudo apt-get update
+# apt-transport-https may be a dummy package; if so, you can skip that package
+sudo apt-get install -y apt-transport-https ca-certificates curl
+
+
+curl -fsSL https://dl.k8s.io/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+
+
+# This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+
+Note: In releases older than Debian 12 and Ubuntu 22.04, /etc/apt/keyrings does not exist by default; you can create it by running sudo mkdir -m 755 /etc/apt/keyrings
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+KIND
+
+
+
+
+
+
+kind cluster
+
+apt update -y
+apt install docker.io
+apt install containerd
+
+
+
+===========Kind installation steps============
+
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.12.0/kind-linux-amd64
+
+chmod +x ./kind
+
+sudo mv ./kind /usr/local/bin/kind
+
+
+
+
+==========kubectl installation steps============
+
+curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+
+
+chmod +x ./kubectl
+
+sudo mv ./kubectl /usr/local/bin/kubectl
+
+
+
+============configfile====================
+# three node (two workers) cluster config
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+
+============create kind cluster============
+
+kind create cluster --config configfile
+
+If nodes are in NotReady state do below steps
+sudo sysctl net/netfilter/nf_conntrack_max=131072
+kind delete cluster
+kind create cluster --config configfile
+
+
+
+
+
+note:- kind cluster will have some diffrence while using volumemount 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   MINIKUBE
+   
+   
+   Kubectl Installation in Ubuntu
+
+# sudo su
+# sudo apt update && apt -y install docker.io
+# curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+# chmod +x ./kubectl
+# sudo mv ./kubectl /usr/local/bin/kubectl
+# which kubectl
+# kubectl version
+# kubectl version -o yaml
+# kubectl version -o json
+
+Now Install install Minikube
+
+# wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+# sudo cp minikube-linux-amd64 /usr/local/bin/minikube
+# sudo chmod 755 /usr/local/bin/minikube
+# minikube version
+# apt install conntrack
+# minikube start --force
+# minikube status
+# kubectl get nodes
+# kubectl driscribe node
