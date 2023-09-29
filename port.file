@@ -1,0 +1,128 @@
+git remote add origin <url>
+
+
+
+
+git clone <url>             used to clone the repo from github
+wget <link>                 to get this link go to download zip,right click and get link address
+
+
+ 
+how to get serial number of laptop
+go to cmd and run the command   "wmic bios get serialnumber"
+
+ 
+ 
+ 
+ /dev/sda1     It is used when we want to make ebs volume as a root volume of ec2 instance.
+ 
+ 
+ 
+FREE TIME LEARN:- website to go through mcq 
+
+
+
+COMMAND TO GO INSIDE AWS CONSOLE BEING A FEDERATED USER. it will be seen in aws console in dashboard (shayad)
+https://nafees.awsapps.com./console
+
+
+
+https://gist.github.com/teja156/8c35a05f43635da4cbd06b47c0d91e93
+wordpress website hosting
+
+
+ 
+command to access mysql from linux instance
+apt install mysql -y
+mysql -h <endpoint> -u <username> -p <nameofDB> 
+then give password
+
+
+
+apnacollege
+nafeesanwer007@gmail.com
+6203275702
+ 
+dockerhub nafeesanwer007@gmail.com Docker@007
+spotify nafeesanwer007@gmail.com Spotify@007 
+github     nafeesanwer007@gmail.com  6203275702n
+codeshare    nafeesanwer007@gmail.com      Codeshare@007 
+godaddy   nafeesanwer007    Splendor@007 
+gogiehost       nafeesanwer007@gmail  Googie@007 
+medium    nafeesanwer007@gmail Medium@007 
+ 
+ 
+ 
+ACID properties and RDBMS
+Four crucial properties define relational database transactions: atomicity, consistency, isolation, and durability—typically referred to as ACID.
+
+Atomicity defines all the elements that make up a complete database transaction.
+Consistency defines the rules for maintaining data points in a correct state after a transaction.
+Isolation keeps the effect of a transaction invisible to others until it is committed, to avoid confusion.
+Durability ensures that data changes become permanent once the transaction is committed.
+
+
+
+
+
+
+
+
+
+
+
+
+what is tcpdump utility ?
+
+top                 command used to know the loads on server,CPU utilization etc will be diplayed
+
+
+
+
+
+kill command in linux:-It is used to terminate the process
+syntax:- kill [signal] PID
+PID-process id
+to know the signal numeric value of operation.Use (kill -l)
+output of kill -l is-
+ 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL      5) SIGTRAP
+ 6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL    10) SIGUSR1
+11) SIGSEGV     12) SIGUSR2     13) SIGPIPE     14) SIGALRM    15) SIGTERM
+16) SIGSTKFLT   17) SIGCHLD     18) SIGCONT     19) SIGSTOP    20) SIGTSTP
+21) SIGTTIN     22) SIGTTOU     23) SIGURG      24) SIGXCPU    25) SIGXFSZ
+26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO      30) SIGPWR
+31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN+1  36) SIGRTMIN+2 37) SIGRTMIN+3
+38) SIGRTMIN+4  39) SIGRTMIN+5  40) SIGRTMIN+6  41) SIGRTMIN+7 42) SIGRTMIN+8
+43) SIGRTMIN+9  44) SIGRTMIN+10 45) SIGRTMIN+11 46) SIGRTMIN+12 47) SIGRTMIN+13
+48) SIGRTMIN+14 49) SIGRTMIN+15 50) SIGRTMAX-14 51) SIGRTMAX-13 52) SIGRTMAX-12
+53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9  56) SIGRTMAX-8 57) SIGRTMAX-7
+58) SIGRTMAX-6  59) SIGRTMAX-5  60) SIGRTMAX-4  61) SIGRTMAX-3 62) SIGRTMAX-2
+63) SIGRTMAX-1  64) SIGRTMAX
+
+
+
+
+
+
+apt install net-tools
+
+
+netstat -lntup
+all listening sockets (-l)
+the port number (-n)
+TCP ports (-t)
+UDP ports (-u)
+PID/Program name (-p)
+
+ss -tunlp :-it will also provide almost the same information
+
+apt install nmap :- ye bhi kaam ki chheez hai
+nmap -n -PN -sT -p- localhost   kaam ki cheez hai ye bhi
+
+
+
+
+
+
+
+dpkg --list                        it will show u all the program running on your machine
