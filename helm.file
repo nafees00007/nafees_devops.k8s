@@ -1,0 +1,56 @@
+deployment.yaml
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{.Values.app.name}}
+  name: {{.Values.app.name}}
+spec:
+  replicas: {{.Values.app.replicas}}
+  selector:
+    matchLabels:
+      app: {{.Values.app.name}}
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: {{.Values.app.name}}
+    spec:
+      containers:
+      - image: {{.Values.app.image}}
+        name: {{.Values.app.name}}
+        resources: {}
+status: {}
+
+
+
+
+root@ip-172-31-0-82:/home/labsuser/myapp1# cat values.yaml
+app:
+   name: myapp
+   replicas: 5
+   image: nginx
+   port: 80
+   type: NodePort
+~                 
+	
+		
+		
+		root@ip-172-31-0-82:/home/labsuser/myapp1/templates# cat service.yaml 
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app.name }}
+spec:
+  ports:
+    - port: {{ .Values.app.port }}
+      targetPort: {{ .Values.app.port }}
+  type: {{ .Values.app.type }}
+  selector:
+    app: {{ .Values.app.name }}
