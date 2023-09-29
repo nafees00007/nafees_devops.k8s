@@ -1,0 +1,58 @@
+
+UNCOMPLICATED FIREWALL (ufw) 
+
+
+
+
+apt install ufw                         
+ufw status 
+ufw enable
+ufw disable
+ufw allow <portnumber>                    Port number will get allowed.
+ufw deny <portnumber>                     Port number will get denied.
+ufw delete allow <portnumber>             That port number whose action is allow will be deleted.
+ufw delete deny <portnumber>              That port number whose action is deny will be deleted.
+
+
+
+If we want to allow the port with specific Ip address then we can do that also.
+
+
+ufw allow from <Ipaddress>                     Anywhere port will get allow for this Ip address  
+ufw deny from <Ipaddress>                      Anywhere port will get deny from this Ip address
+ufw delete deny/allow from <Ipaddress>         Rule get deleted
+
+
+
+
+Generally oursystem is having two type of path through which traffic come.
+1:- Ethernet
+2:-NIC
+
+ip link show                                              Command to see all interface through which traffic may enter
+ufw allow in on eth0 from <Ipaddress>                     Command to allow anywhere on eth0 on this Ip adress
+
+
+
+
+
+If we want to allow UDP port thn we need to specify 
+ufw allow 25868/udp                                       Command to allow UDP port.
+Note:- Rest of the comand like allow deny delete etc will be same.
+
+
+
+
+Command to allow anywhere port to subnet of Ip address
+ufw allow from 192.168.10.0/24                         192.168.10.0 to 192.168.10.255 all ports get allowed from anywhere.
+
+ufw allow from 192.168.10.0/24 proto tcp to any port 22               This command is used to allow trafic through port number 22 only. NOT ANYWHERE.
+
+
+
+
+
+
+
+
+
