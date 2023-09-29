@@ -1,0 +1,432 @@
+04-15-2023
+
+Taint and Tolerations
+
+	Taint it a lock on the nodes used for scheduling
+	Key=Value:Effect
+		hdd=ssd:noschedule
+Effect
+	NoSchedule
+	PreferNoSchedule
+	NoExecute
+
+k taint no worker-node-2.example.com hdd=ssd:NoSchedule
+
+Disable Scheduling on nodes
+k cordon worker-node-2.example.com
+k uncordon worker-node-2.example.com
+
+  429  k label no worker-node-2.example.com hdd-
+
+  438  alias k=kubectl
+  439  k get no
+  440  k describe no worker-node-2.example.com
+  441  k describe no worker1
+  442  k get no
+  443  k describe no master
+  444  k taint no worker-node-2.example.com hdd=ssd:NoSchedule
+  445  k describe no worker2
+  446  k get all
+  447  k delete po ngin
+  448  k get no
+  449  vi pod.yaml 
+  450  k apply -f pod.yaml 
+  451  k get po
+  452  k get po -o wide
+  453  k delete po ngin
+  454  k get po
+  455  k get no
+  456  k cordon worker1
+  457  k get no
+  458  k apply -f pod.yaml 
+  459  k get po
+  460  k get po -o wide
+  461  k describe po ngin
+  462  k delete po ngin
+  463  vi pod.yaml 
+  464  k apply -f pod.yaml 
+  465  k get po
+  466  k get po -o wide
+  467  k explain po.spec.tolerations
+  
+pod.yaml
+  
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ngin
+  name: ngin
+spec:
+  tolerations:
+        - key: hdd
+          operator: Equal
+          value: ssd
+          effect: NoSchedule
+  containers:
+  - image: nginx
+    name: ngin
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+_______________________________________________________
+
+Daemonset
+	creates a pod on each node
+	
+	  469  cat pod.yaml 
+  470  vi ds.yaml
+  471  k taint no worker2 hdd-
+  472  k get no
+  473  k uncordon worker1
+  474  k get no
+  475  k get ds
+  476  k get ds -n kube-system
+  477  k get po -o wide -n kube-system
+  478  vi ds.yaml 
+  479  k apply -f ds.yaml 
+  480  k get ds
+  481  k get po -o wide
+  482  k delete po fluentd-elasticsearch-5jr6k
+  483  k get po -o wide
+  484  history 
+  
+  
+  
+  ds.yaml
+  
+   
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd-elasticsearch
+  labels:
+    k8s-app: fluentd-logging
+spec:
+  selector:
+    matchLabels:
+      name: fluentd-elasticsearch
+  template:
+    metadata:
+      labels:
+        name: fluentd-elasticsearch
+    spec:
+      tolerations:
+      # these tolerations are to have the daemonset runnable on control plane nodes
+      # remove them if your control plane nodes should not run pods
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: fluentd-elasticsearch
+        image: quay.io/fluentd_elasticsearch/fluentd:v2.5.2
+
+Deployment/DaemonSet
+	running all the time
+_______________________________________________________
+
+Job
+	Backup
+	Cleanup
+		pod will be created and run the tasks
+	k create job myjob --image=ubuntu:20.04 --dry-run=client -o yaml -- /bin/sh -c "sleep 10" > job.yaml
+	
+	
+  485  cat ds.yaml 
+  486  k create job myjob --image=ubuntu:20.04 --dry-run=client -o yaml -- /bin/sh -c "sleep 10" > job.yaml
+  487  vi job.yaml 
+  488  watch kubectl get all
+  489  k get all
+  490  k delete ds fluentd-elasticsearch
+  491  k delete po ngin
+  492  k get all
+  493  k apply -f job.yaml 
+  494  watch kubectl get all
+  495  vi job.yaml 
+  496  k delete job myjob
+  497  k apply -f job.yaml 
+  498  watch kubectl get all
+  499  vi job.yaml 
+  500  k delete job myjob
+  501  k apply -f job.yaml 
+  502  watch kubectl get all
+  503  history 
+  
+  
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: myjob
+spec:
+  completions: 10
+  parallelism: 3
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - /bin/sh
+        - -c
+        - sleep 10
+        image: ubuntu:20.04
+        name: myjob
+        resources: {}
+      restartPolicy: Never
+status: {}
+  503  history 
+  
+_______________________________________________________
+
+CronJob
+
+	https://crontab.guru/
+	
+  504  cat job.yaml 
+  505  #k create cj mycj --image=ubuntu:20.04 --schedule="*/1 * * * *" --dry-run=client -o yaml -- /bin/sh -c "sleep 10" > cj.yaml
+  506  k create cj mycj --image=ubuntu:20.04 --schedule="*/1 * * * *" --dry-run=client -o yaml -- /bin/sh -c "sleep 10" > cj.yaml
+  507  k delete job myjob
+  508  vi cj.yaml 
+  509  k apply -f cj.yaml 
+  510  watch kubectl get all
+  511  vi cj.yaml 
+  512  history 
+  
+  
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  name: mycj
+spec:
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+      name: mycj
+    spec:
+      completions: 3
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - command:
+            - /bin/sh
+            - -c
+            - sleep 10
+            image: ubuntu:20.04
+            name: mycj
+            resources: {}
+          restartPolicy: OnFailure
+  schedule: '*/1 * * * *'
+status: {}
+
+_______________________________________________________
+
+ConfigMap
+
+  513  cat cj.yaml 
+  514  k explain cj.spec
+  515  k explain cj.spec.jobtemplate
+  516  k explain cj.spec.jobTemplate
+  517  k explain cj.spec.jobTemplate.spec
+  518  k get cm
+  519  k create cm mycm --from-literal=DB_HOST=localhost --from-literal=DB_PASS=admin
+  520  k describe cm mycm
+  521  vi myconfig.ini
+  522  k create cm mycm1 --from-file=myconfig.ini 
+  523  k describe cm mycm1
+  524  vi pod.yaml 
+  525  k describe cm mycm
+  526  vi pod.yaml 
+  527  k get all
+  528  k delete cj mycj
+  529  k get all
+  530  k apply -f pod.yaml 
+  531  vi pod.yaml 
+  532  k apply -f pod.yaml 
+  533  k get po
+  534  k exec -it ngin bash
+  535  history 
+  
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ngin
+  name: ngin
+spec:
+  containers:
+  - image: nginx
+    name: ngin
+    env:
+         - name: DBHOST
+           valueFrom:
+                   configMapKeyRef:
+                           name: mycm
+                           key: DB_HOST
+         - name: DBPASS
+           valueFrom:
+                   configMapKeyRef:
+                           name: mycm
+                           key: DB_PASS
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+logfile=myapp.log
+dbhost=192.168.0.1
+dbpass=password
+
+_______________________________________________________
+
+536  cat pod.yaml 
+  537  cat myconfig.ini 
+  538  l
+  539  k get po
+  540  k delete po ngin
+  541  vi pod.yaml 
+  542  k apply -f pod.yaml 
+  543  vi pod.yaml 
+  544  k explain po.spec.volumes
+  545  vi pod.yaml 
+  546  k apply -f pod.yaml 
+  547  k get po
+  548  k exec -it ngin bash
+  549  history 
+  
+  
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ngin
+  name: ngin
+spec:
+  containers:
+  - image: nginx
+    name: ngin
+    ports:
+    - containerPort: 80
+    volumeMounts:
+            - name: myvol
+              mountPath: /etc/lala
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+          - name: myvol
+            configMap:
+                    name: mycm1
+status: {}
+  
+_______________________________________________________
+  
+Secret
+
+	not a foolproof to securing data, just adding an extra layer
+		use external password managers to secure better
+		
+secretKeyRef
+
+  550  cat pod.yaml 
+  551  k get secret
+  552  k create secret generic mysecret --from-literal=password=admin
+  553  k get secret
+  554  k describe secret mysecret
+  555  vi pod.yaml 
+  556  history 
+  
+_______________________________________________________
+
+8. Output the yaml file of the pod you just created
+
+kubectl get pod ngin -o yaml > pod.yaml
+
+9. Output the yaml file of the pod you just created without the cluster-specific information
+
+kubectl get pod ngin -o yaml --export > pod-without-cluster-info.yaml
+
+10. Get the complete details of the pod you just created
+
+kubectl describe pod ngin
+
+11. Delete the pod you just created
+
+kubectl delete pod ngin
+
+12. Delete the pod you just created without any delay (force delete)
+
+kubectl delete pod ngin --force --grace-period=0
+
+13. Create the nginx pod with version 1.17.4 and expose it on port 80
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ngin
+spec:
+  containers:
+  - name: ngin
+    image: nginx:1.17.4
+    ports:
+    - containerPort: 80
+	
+_______________________________________________________
+
+14. Change the Image version to 1.15-alpine for the pod you just created and verify the image version is updated
+
+kubectl apply -f pod.yaml
+
+15. Change the Image version back to 1.17.1 for the pod you just updated and observe the changes
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ngin
+spec:
+  containers:
+  - name: ngin
+    image: nginx:1.15-alpine
+    ports:
+    - containerPort: 80
+
+16. Check the Image version without the describe command
+
+kubectl get pod ngin -o jsonpath='{.spec.containers[*].image}'
+
+k get po -o=jsonpath="{.items[*].spec.containers[0].image}
+
+17. Create the nginx pod and execute the simple shell on the pod
+
+kubectl run my-nginx --image=nginx --restart=Never
+
+kubectl exec -it my-nginx -- /bin/sh
+
+18. Get the IP Address of the pod you just created
+
+kubectl get pod my-nginx -o wide
+
+19. Create a busybox pod and run command ls while creating it and check the logs
+
+kubectl run my-busybox --image=busybox --restart=Never --command -- ls
+
+kubectl logs my-busybox
+
+20. If pod crashed check the previous logs of the pod
+
+kubectl logs my-pod --previous
