@@ -1,0 +1,556 @@
+Today's Agenda : Functions
+
+It is block of set of statement that can repeatedly call. 
+
+If a group of statements is repeatedly required then it is not recommended to write these statements everytime seperatly. 
+
+We have to define these statements as a single unit and we can call that unit any number of times based on our requirement without rewritting. 
+This unit is nothing  but function. 
+
+The main advantage of function is code Reuseabielity. 
+Note : In other languages function are known as methods, procedure , subroutines etc. 
+
+
+Python Supports two types functions 
+1. Buit in Functions or Pre-define function
+2. User Defined Functions. 
+
+
+1. Built in Functions :
+The functions which are coming along with Python software automatically , are called built in functions or pre-define functions.
+example :
+	id()
+	type()
+	print()
+	input()
+	eval()
+	etc....
+
+2. User Defined Functions. :
+The functions which are developed by programmer explicitly according to business requirements, are called user define functions.
+
+Syntax to create user defined function:
+
+def function_name(parameters):
+     statements. 	
+     return value
+
+
+Note : While creating functions we can use two keywords. 
+	1. def ( mandatory)
+	2. return (optional)
+
+--------------------------------------------------------------------------------------------------
+#Write a function to print Hello Python
+
+
+def fun():
+    print('Hello Python')
+
+
+fun()
+fun()
+fun()
+---------------------------------------------------------------------------------------------------
+Parameters :
+Parameters are inputs to the function. If a function contain parameters, then at the time of calling, compulsory we should provide values, otherwise we will get error. 
+
+def addition(a,b):
+    return a+b
+
+num = addition(10,20)
+print(num)
+print(addition(15,26))
+
+#print(addition(10,20,30))   #TypeError: addition() takes 2 positional arguments but 3 were given
+
+#print(addition(10))         #TypeError: addition() missing 1 required positional argument: 'b'
+----------------------------------------------------------------------------------------------------------
+Return Statement:
+
+Function can take input values as parameters and executes business logic , and returns output to the caller with return statement. 
+
+def addition(a,b):
+    return a+b
+
+num = addition(10,20)
+print(num)
+print(addition(15,26))
+
+If we are not mentioning return statement then default return value is None. 
+
+def fun():
+       print('Hello Python')
+
+
+print(fun())   # Hello Python
+	    # None		
+
+---------------------------------------------------------------------------------------------------------
+1. WAP to using function to check whether a given number is Odd or Even
+2. WAP to return factorial of given number using function
+3. WAP to swap two number using Functions. 
+4. WAP to for Calculater to function all arithmetic operation. 
+5. WAP to check wether a given number is Prime or Not Prime...
+------------------------------------------------------------------------------------------
+Returning multiple values from a function
+
+In other languages like c,c++ and java, function can return atmost one value. But in Python, a function can return any number of values. 
+
+
+Example
+'''
+
+def sum_sub(a,b):
+    sum = a + b
+    sub = a - b
+
+    return sum , sub
+
+x,y = sum_sub(10,20)
+
+print('Sum of two numbers ',x)
+print('Sub of two numbers ',y)
+
+
+'''
+Output :
+Sum of two numbers  30
+Sub of two numbers  -10
+'''
+--------------------------------------------------------------------------------------------------------
+
+Types of Arguments :
+example :
+	def fun(a,b):
+	      statements...
+
+	fun(10,20)
+
+
+a and b are formal arguments ,where as 10,20 are actual arguments. 
+
+There are four types of actual arguments are allowed in Python.  
+
+1. Positional arguments.
+2. keyword arguments. 
+3. default arguments. 
+4. variable length arguments. 
+5. variable length keyword arguments. 
+
+#1. Positional Arguments :
+These are the arguments passed to function in correct positional order.
+
+def sub(a,b):
+  print(a-b)
+
+sub(10,20)
+sub(20,10)
+
+The number of arguments and position arguments must be matched.
+If we change the order then result may be changed.
+
+If we change the number of arguments then we will get error. 
+
+
+#2. Keyword Arguments :
+
+We can pass argument values by Keyword. i.e. by parameter name.
+
+def student_info(rollno,name,marks):
+    print('Roll no : ',rollno)
+    print('Name : ',name)
+    print('Marks : ',marks)
+
+
+student_info(10,'Rakesh',340)
+'''
+Output :
+Roll no :  10
+Name :  Rakesh
+Marks :  340
+'''
+
+student_info('Sumit',300,102)
+'''
+Output :
+
+Roll no :  Sumit
+Name :  300
+Marks :  102
+
+'''
+student_info(name='Sumit',marks=300,rollno=102)
+'''
+Output :
+Roll no :  102
+Name :  Sumit
+Marks :  300
+'''
+
+----------------------------------------------------------------------------------------
+
+3. default arguments.  
+Sometimes we can provide default values for our positional arguments
+
+def sum(a,b=0):
+    return a+b
+
+print(sum(10)) #TypeError: sum() missing 1 required positional argument: 'b'
+print(sum(10,20))
+------------------------------------------------------------------------------------------
+4. Variable Length of Arguments : 
+
+Sometimes we can pass variable number of arguments to our function, such type of arguments are called variable length arguments. 
+
+We can declare a variable length arguments with * symbol as follows. 
+
+def fun(*args):
+    statement...
+
+We can call this function by passing any number of arguments including zero number.
+
+Internally all these values represented in the form of tuple. 
+
+#function with variable length of argument. 
+
+def student_info(*info):
+    print('\n\nStudent Info')
+    for i in info:
+        print(i)
+    
+
+student_info(101)
+student_info(101,'Rakesh')
+student_info(101,'Sumit',400)
+student_info(101,'Kapil',400,'Delhi')
+----------------------------------------------------------------------------------------------
+
+5. Function with variable length of keyword arguments. 
+Note : We can declare keyword variable length arguments also. 
+	for this we have to use **
+Syntax :  def fun(**kwargs):
+
+We can call this function by pasing any number of keyword arguments. Internally these keyword arguments will be stored inside a dictionary. 
+
+def student_info(**kwargs):
+    print('\n\nStudent Info')
+    for key,value in kwargs.items():
+        print(f"{key} : {value}")
+
+
+
+student_info(rollno=101,name='Rakesh')
+student_info(rollno=101,name='Rakesh',marks=300)
+student_info(rollno=101,name='Rakesh',location='Delhi')
+-----------------------------------------------------------------------------------------------------
+
+Types of Variables 
+
+Python supports two types of variables. 
+
+1. Global Variable
+2. Local Variable 
+
+1. Global Variables :-
+The variables which are declared outside of function are called global variables. 
+These variables can be accessed in all function of that module. 
+
+a = 10   #Global Variable
+
+def fun1():
+    print('Value of a in fun1',a)
+
+def fun2():
+    print('Value of a in fun2',a)
+
+
+fun1()
+fun2()
+--------------------------------------------------------------------------------------------------
+2. Local Variables :
+
+The variables which are declared inside a function are called local variables.
+Local variables are available only for the function in which we declared it. i.e. from outside of function we cannot access. 
+
+def fun1():
+    a = 10  #Local variable for fun1
+    print('Value of a in fun1 ',a)
+
+
+def fun2():
+    print('Value of a in fun2',a) #NameError: name 'a' is not defined
+
+
+fun1()
+fun2()
+--------------------------------------------------------------------------------------------------------
+global keyword :
+We can use global keyword for the following two purpose. 
+
+1. To declare global variable inside function
+------------------------------------------------------------------------------
+def fun1():
+    global a # a is declare as globla variable...
+    a = 10
+    print('Value of a in fun1 ',a)
+
+
+def fun2():    
+    print('Value of a in fun2 ',a) 
+
+fun1()
+fun2()
+
+
+
+------------------------------------------------------------------------------
+2. To make global variable available to the function so that we can perform required modification :
+
+a = 10 # global variable 
+def fun1():
+    global a #global variable...
+    a = 999
+    print('Id of a inside of fun1 ',id(a))
+    print('Value of a in fun1 ',a)
+
+def fun2():
+    print('Value of a in fun2 ',a)
+    print('Id of a inside of fun2 ',id(a))
+
+
+print('Id of a outside of function ',id(a))
+fun1()
+fun2()
+print('Id of a outside of function ',id(a))
+--------------------------------------------------------------------------------------------------------
+Note : If global variable and local variable having the same name then we can access global variable inside a function as follows.
+
+a = 10  # global variable
+
+def fun1():
+    a = 999 # local variable
+    print('Value of a (local variable)',a)
+    print('Value of a (global variable)',globals()['a'])
+
+fun1()
+  ------------------------------------------------------------------------------------------
+Anonymous Functions :
+
+Sometimes we can declare a function without any name, such type  of nameless functions are called anonymous functions or lambda functions. 
+
+The main purpose of anonymous function is just for instant use (i.e. for one time usage)
+
+
+Normal Function :
+We can define by using def keyword. 
+def square(num):
+         return num * num
+
+
+Lambda Function :
+We can define by using lambda keyword 
+
+lambda  num : num * num
+
+Syntax  of lambda function 
+	lambda argument_list : expression
+
+
+Note : By using Lambda function we can write very concise code so that readability of the program will be improved.
+
+sm = lambda a, b : a + b
+
+print('The sum of two numbers ',sm(10,20))
+print('The sum of two numbers ',sm(15,70))
+
+even_odd = lambda num : 'Even' if num % 2 == 0 else 'Odd'
+
+print('The number 5 is ',even_odd(5))
+print('The number 6 is ',even_odd(6))
+
+largest = lambda a,b : a if a > b else b
+
+print('Largest of two numbers ',largest(10,20))
+print('Largest of two numbers ',largest(30,20))
+--------------------------------------------------------------------------------
+Note : Lambda Function internally returns expression value and we are not required to write return statement explicitly. 
+
+Note : Sometimes we can pass function as argument to another function. 
+           In such cases lambda functions are best choice. 
+
+We can use lambda functions very commonly with filter(), map() and reduce() functions, because these functions expect functions as argument. 
+----------------------------------------------------------------------------------------------------------
+filter() function : - It return a list of values as per the condition....
+#Syntax : filter(func,sequence)
+
+lst = list(range(1,11))
+print('List ',lst)
+
+#Without Lambda Function 
+print('Without Lambda Function')
+def if_even(num):
+    if num % 2 == 0:
+        return True
+    else:
+        return False
+
+even_List = list(filter(if_even,lst))
+
+print('Even List ',even_List)
+
+    
+'''
+Output :
+List  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+Even List  [2, 4, 6, 8, 10]
+'''
+
+#With Lambda Function
+print('With Lambda Function')
+even_List = list(filter(lambda num : num % 2 == 0,lst))
+
+print('Even List ',even_List)
+
+
+----------------------------------------------------------------------------------------------------------
+
+map() function : - For every element present in the given sequence, apply some functionality  and generate new element with the required modification. For this requirement we should go for map() function.
+
+Eg: For every element present in the list preform double and generate new list of doubles.
+
+Synatx : map(function, sequence)
+The function can be applied on each element of sequence and generates new sequence. 
+
+
+#Eg : Without Lambda
+
+print('Without Lambda')
+lst1 = [1,2,3,4,5]
+
+
+def double(x):
+    return 2*x
+
+lst2 = list(map(double,lst1))
+print('List 2 ',lst2) #Output : List 2  [2, 4, 6, 8, 10]
+
+
+
+#Eg : With Lambda
+
+print('\n\nWith Lambda')
+lst1 = [1,2,3,4,5]
+
+lst2 = list(map(lambda x: x*2,lst1))
+print('List 2 ',lst2) #Output : List 2  [2, 4, 6, 8, 10]
+
+-----------------------------------------------------------------------------------------------
+reduce() function : 
+reduce() function reduces sequence of elements into a single element by applying the specified function. 
+
+reduce(function,sequence)
+
+reduce() function present in functools module and hence we should write import statement.
+
+from functools import *
+lst1 = [1,2,3,4,5]
+
+result = reduce(lambda x ,y : x + y, lst1)
+print('Result : ',result)
+
+result = reduce(lambda x ,y : x * y, lst1)
+print('Result : ',result)
+
+=================================================================
+------------------------    Nested Functions :  --------------------------------
+
+We can declare a function inside another function, such type of functions are called Nested function. 
+
+Example :
+def outer():
+    print('Outer Function started ')
+    def inner():
+        print('Inner Function execution')
+    print('Outer Function calling Inner Function')
+    inner()
+
+outer()
+
+In the above example inner() function is local to outer() function and hence it is not possible to call directly outside of outer() function 
+
+#Note : A function can return another function. 
+
+def outer():
+    print('Outer Function started ')
+    def inner():
+        print('Inner Function execution')
+    print('Outer Function calling Inner Function')
+    return inner
+
+
+fun1 = outer()
+fun1()
+
+Question : What is the difference between the following lines?
+
+Case 1  : f1 = outer  			(f1 is aliasing of outer function)
+Case 2  : f1 = outer()   		(f1 is aliasing of inner function)
+
+Case1 : In the first case for the outer() function we are providing another f1 ( function aliasing ).
+
+Case 2 : But in the second case we calling outer() function, which returns inner function. For that inner function() we are providing another name f1
+
+
+Note : We can pass function as argument to another function....
+Example :
+	1. filter(function,sequence)
+	2. map(function,sequence)
+	3. reduce(function,sequence)
+
+Task : WAP for Banking System that perform Withdraw , Deposit and Balance Equery using Functions...
+-------------------------------------------------------------------------------------------------------------
+Function Decorators :
+
+Decorators is a function which can take a function as argument and extend its functionality and returns modified function with extended functionality. 
+
+The main object of decorator function is we can extend the functionality of existing functions without modifies that function. 
+
+#Function Decorators.
+
+
+def makemepretty(func): # It work as a Decorator Function
+    def inner_fun():
+        print('Now I am pretty')
+        func()
+    return inner_fun
+
+@makemepretty       #Now it is a decorator...
+def Ordinary():
+    print('I am ordinary function....')
+
+#pretty = makemepretty(Ordinary)
+#pretty()
+
+Ordinary()
+----------------------------------------------------------------------------------
+def smart_division(func):
+    def inner_fun(a,b):
+        print(f"We are dividing {a} with {b}")
+        if b == 0:
+            print('Sorry, unable divide by Zero')
+            return
+        else :
+            return func(a,b)
+    return inner_fun
+
+
+@smart_division
+def division(a,b):
+    return a / b
+
+print('Program start here... ')
+print(division(10,20))
+print(division(50,0)) #ZeroDivisionError: division by zero
+print('Thank you ')
+-------------------------------------

@@ -1,0 +1,38 @@
+30-04-2023 (last class of git and github)
+
+Steps for Rebase
+(rebase ki madadse ham apne feature branch ko apne main branch k kisi doosre agle commit k saath attach kr sakte hain
+ taki us agle commit ka content bhi hamare feature branch k ander aa jae ...... 
+ aur ye hamare log ko ek seedha ar straight smooth commit de like m1 m2 m3 f1 f2 f3 instead of m1 m2 f1 f2 m3)
+1)	Let’s create a new project
+2)	Now let’s create a new file – abhi.txt
+3)	Git init
+4)	Git status
+5)	Git add
+6)	Git commit – m “main commit 1”
+7)	Now make some changes 
+8)	Git status
+9)	Git add
+10)	Git commit – m “main commit 2”
+11)	Create a new feature branch
+12)	Move to the new feature branch
+13)	Git log --oneline
+14)	Git checkout main
+15)	Git log --oneline
+16)	Both the branches are at same level of commits
+17)	Now create a new commit in main branch
+18)	Git commit -n “main commit 3”
+19)	Git log –oneline
+20)	Git checkout feature branch
+21)	Git log –oneline
+22)	Differences are there in both the branches
+23)	Add a new file into the feature branch
+24)	Commit two changes “feature commit 1” and “feature commit 2”
+25)	Git log –oneline
+26)	Git rebase main
+27)	Git log –oneline
+
+
+CHERRY-PICK - 
+(es concept me ham apne feature branch k ander wale kisi ek ya do commit ko main branch m add kar sakte hain zaroorat k hisab se.
+ cherry-pick  karne se ek replica "duplicate" commit bantahai jo master m attach hota hai .....jiska commit id bhi alag hota hai ...)

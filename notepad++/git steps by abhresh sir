@@ -1,0 +1,71 @@
+
+practice set by abhresh
+
+
+1)Create a directory – learngit
+2)	Go inside the dir
+3)	Initialize the repo as git repo
+4)	Echo Welcome to Git Training > git.txt
+5)	Check the status
+6)	Git.txt in untracked stage also referred as red zone
+7)	Move the file to staging area
+8)	Check the status
+9)	File should be in green zone – the staged area.
+10)	Now commit the file with a message
+11)	Check the status
+12)	Modify the file
+13)	Run the status
+14)	File should show modified and in red zone
+15)	Move to staging area
+16)	Run the status
+17)	Run the commit
+18)	Check the status – Everything is clean in the status
+19)	Modify the file
+20)	Move to staging area
+21)	Edit the file
+22)	Run the status - 2 copies visible 1 in red and 1 in green
+23)	Move the red file to staged file
+24)	Run the status – now files are merged to one copy of two changes.
+25)	Commit the file
+26)	Go to github
+27)	Create a new repo
+28)	Copy the SSH URL
+29)	Go to git terminal
+30)	Connect the url of repo as remote repo with the name origin
+31)	Verify the remote connection
+32)	Check the status
+33)	Check if any new updates available in github
+34)	Push the local changes to remote repo
+35)	Verify the updates on github if they are visible now
+36)	If the updates are visible then we have successfully completed the process.
+37)	Go to github
+38)	Create a new file and commit the change in github
+39)	Go to local
+40)	Fetch the changes
+41)	Git status – it should reflect that the remote is 1 commit ahead of local
+42)	Pull the changes
+43)	Git status – everything is clean now.
+
+
+
+
+
+
+practice for git diff command by abhresh
+Steps for difference check
+1)	Go to learngit project
+2)	Check status
+3)	Create a new file – temp.txt
+4)	Move it to staging area
+5)	Commit the change
+6)	Check status
+7)	Now edit the temp.txt
+8)	Check the status
+9)	File should be in modified stage/unstaged area
+10)	Run the diff command
+11)	You can view the difference between the committed file and unstaged file
+12)	Now move the file to staging area
+13)	Run the diff command
+14)	You will see the difference between the committed file and staging file
+15)	Commit the file
+16)	Run the oneline log and take the latest 

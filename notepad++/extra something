@@ -1,0 +1,101 @@
+class 1 , aws developer associate , date 06/may
+
+github url https://github.com/riteshbehal/Assignments
+
+latency of zone concept
+
+f=9Va8Ibkq-u)Ch2;%UzBjMZvEz3AadT
+f=9Va8Ibkq-u)Ch2;%UzBjMZvEz3AadT
+
+iis.nginx.tomcat.jboss
+
+aws community builder (free hour jo mila hai sir ko uske lie )
+
+link by riddhima student https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html
+
+
+
+
+class2 07/may
+
+try cidr.xyz  to explore cidr
+
+peering
+endpoint
+vpc
+routing table
+
+EFS(Elastic File System)
+efs-1.create a EFS
+    2.create two linux machine
+	3.mount the efs on linux machines
+	
+Create EFS 
+Add Security group of Ec2 instaces to EFS Network Security Group 
+
+Create 2 Ec2 Instances Linux
+Same Security groups for both instances 
+
+sudo su
+sudo yum install -y amazon-efs-utils
+goto efs attach then take command- (sudo mount -t efs -o tls fs-08df0b7f007d62c79:/ efs) and run on ec2 terminals to mount efs on each teermials
+allow the nfs port(2049) in EC2 instance sg
+sudo mkdir efs in both instances
+after that efs folder will be shared among the linux users
+
+
+
+so to practice :
+1. create VPC
+2. create Subnet: public and private
+3. create route tables for both 
+4. add IGW 
+5. Add NAT 
+6. Try Peering after creating second VPC 
+7. Endpiont 
+ seems ok right ? 
+
+@AzHX(NO7n@ct!c?yyTP%pi-zM6rMdae
+
+v%S9tqldw!B4gHgRTPLnaeT36Z2;PTTV 
+
+
+
+Dbeaver 
+sqlserver management studio
+mysql worbench tool
+
+option group (imp concept)
+
+
+https://youkudbhelper.wordpress.com/2018/05/16/export-import-data-on-amazon-rds-using-datapump-utility/    given by prasanthi
+
+
+assignment:
+Daily basis 10 AM IST/EST, I need a backup through commands to S3
+I am going to upload some data to S3. In one job you have to push s3 data to Oracle/Mysql/Postgres/MSSQL (any of these).
+
+
+what is schema ??
+
+PC4t3ENONwnNdGRCL26DcLjKv@S2VyNd
+
+aws cli need to be installed
+AmazonEC2RoleforSSM
+AmazonSSMManagedInstanceCore
+AmazonSSMFullAccess
+session-manager-plugin need to be installed
+create ec2 instance and then attach the iam role to the instance
+aws ssm start-session --target  i-03973050cb2ae8559 --document-name AWS-StartPortForwardingSession --parameters "localPortNumber=9090,portNumber=3389" --region ap-south-1
+
+aws ssm start-session \
+    --target instance-id
+
+
+class 04
+
+s3 browser
+
+what is aws lambda?
+AWS Lambda is a serverless compute service that runs your code in response to events and automatically manages the underlying compute resources for you
+cron job in lambda 

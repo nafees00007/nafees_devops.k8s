@@ -1,0 +1,133 @@
+23 april 2023
+
+Steps for Clean(clean command sirf ar sirf untracked file k lie use hota hai 
+git clean -fdx "-fdx lagane se forcefully delete ho jaega directory ar uske ander ka file and ignored file sab ka sab")
+
+1)	Go to learngit repo
+2)	Run the status
+3)	Add a new file
+4)	Run the status
+5)	File in the untracked area
+6)	Now run the command to remove the file
+7)	Run the status
+8)	File removed
+9)	Add a directory and a file inside the directory
+10)	Add a file outside the directory
+11)	Now run the clean command to remove the directory and files
+12)	Run the status file and directory is removed successfully
+13)	Add a directory and a file inside the directory
+14)	Add a file outside the directory
+15)	Now run the clean command to remove the directory and files along with ignored files
+16)	Run the status file and directory is removed successfully
+
+
+
+
+
+
+
+
+Steps for RM
+(rm command ko ham working staging ya committing rea m rehke bhi delete kr sakte hain)
+(cached wala command bhi isi m hai jisse file history me se delete hoga but folder m rahega locally)
+
+1)	Go to learngit repo
+2   Run status
+3)	Add a new file testrm1.txt
+4)	Commit the change
+5)	Run the status
+6)	Run the rm command to delete testrm1.txt
+7)	File is deleted
+8)	Run the status
+9)	Now add a new file testrm2.txt and commit it
+10)	Now run the status
+11)	Now run the command for removing the file but without deleting it from the repo
+12)	Run the status
+13)	Same file now visible in unstaged and staged area
+14)	Just commit the file from staging area keeping the unstaged file as it is
+15)	Run the status
+16)	Record of deletion moved to the commit
+17)	New file is in untracked area
+18)	Add the same file name testrm2.txt in the .gitignore
+19)	Now run the status
+20)	Now the file is not visible instead .gitignore is visible as modified
+21)	Run the commit for .gitignore
+22)	Run the status
+23)	Now the file is never going to be a part of the repo further. 
+24)	History of that file is over.
+
+
+
+
+
+Steps for Reset 
+(reset ko tabhi use karenge jab tak hamara data local k andr hai.
+agar data ko hm remote m push krdenge to uske baad reset use nhi hoga 
+reset is of three type soft,mixed,hard)
+
+1)	Go to learngit repo
+2)	Add a new file reset.txt
+3)	Add a heading – “Welcome to Git and Github Course”
+4)	Check the status
+5)	Commit the changes
+6)	Modify reset.txt by adding second line – “Instructor-led Learning!”
+7)	Check the status
+8)	Commit the changes
+9)	Now you have two commits for the same file
+10)	Add another commit with line 3 – “By Abhresh”
+11)	Run the mixed reset command and go to 1st commit
+12)	Run the status – File should be in unstaged area
+13)	Move the file back to the committed stage by committing the file
+14)	Run the soft reset command
+15)	Run the status – File should be in staged area
+16)	Move the file back to the committed stage by committing the file
+17)	Run the hard reset command
+18)	Run the status – File is deleted
+19)	Now commit the changes of deletion of the file.
+
+Steps for reset part 2
+
+1)	Go to learngit repo
+2)	Run the status
+3)	Run the oneliner log
+4)	Copy any old commit where a new file was created
+5)	Run the reset command to move the repo to that commit
+6)	This will reset the history to that commit and now all the newer commits are deleted.
+
+
+
+
+
+Steps for revert command (revert m knot reh jaega ar backward hojaega 
+revert ko ham remote m push krne k baad bhi use kr sakte hain)
+
+1)	 Make a new dir – revertgit
+2)	Add a new file – a.txt
+3)	Commit the change with a msg as m1
+4)	Add a new file – b.txt
+5)	Commit the change with a msg as m2
+6)	Add a new file – c.txt
+7)	Commit the change with a msg as m3
+8)	Run the log
+9)	Run the revert with commit id of 3rd commit
+10)	Your c.txt gets deleted and a new commit is created for reverting to the stage of 2nd commit completion.
+11)	Run the log
+12)	The repository is back to the state of 2nd commit
+
+Steps for revert command part2
+
+13)	To bring back the latest commit back to the repo
+14)	Run the log
+15)	Run the reset to commit 3
+16)	But the file is not back into the repo
+17)	Run the checkout c.txt
+18)	This will bring the file back to our repo.
+
+Steps to Reset for old records using Reflog clear
+
+1)	Run the Reflog
+2)	Copy the commitid
+3)	Checkout weather that commit is correct
+4)	Run the reset command with the expected commit
+5)	If there is any file which was deleted, then system will show you the file name with D mark
+6)	Recover the file using checkout and file name command

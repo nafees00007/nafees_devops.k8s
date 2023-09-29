@@ -1,0 +1,732 @@
+==========================================================
+DICTIONARY DATA STRUCTURE:
+
+We can use List, Tuple and Set to represent a group of individual objects as  a single entity. 
+
+If we want to represent a group of object as key-value pairs then we should go for Dictionary.
+
+Eg:- 
+	rollno    -- name
+	productid -- productname
+	ipaddress -- domainname
+	likes	  -- no. of likes
+    comments  -- no. of comments
+  	price     -- price_of_product
+
+Duplicate keys are not allowed but values can be duplicated. 
+Hetrogenous objects are allowed for both key and values. 
+Insertion order is not preserved
+Dictionaries are mutable 
+Dictionaries are dynamic
+Indexing and slicing concepts are not applicable. 
+
+Note : In c++ and Java Dictionary are know as "Map" where as in Perl and Ruby it is know as "Hash"
+
+--------------------------------------------------------------------------------------------------
+How to create Dictionary ?
+
+d = {} or d = dict()
+
+We are creating empty dictionary. We can add entries as follows. 
+
+d[100] = 'Delhi'
+d[101] = 'Mango'
+d[300] = 'Sunday'
+
+
+print(d)  # {100 : 'Delhi', 101 : 'Mango', 300 :'Sunday'}
+
+If we know data in advance then we can create dictionary as follows. 
+d = {'rollno' : 101, 'name' : 'Rakesh','makrs' : 400}
+
+Syntax :      d ={key :  value, key : value}
+
+---------------------------------------------------------------------------
+How to access data from the dictionary?
+
+We can access data by using keys
+
+d1 = {101:'Mango',102:'Sunday',103:'Delhi'}
+
+print(d1[101])   #Output : Mango
+print(d1[102])   #Output : Sunday
+
+
+If the spcified key is not available then we will get KeyError. 
+
+print(d1[300])   #KeyError : 300
+
+We can prevent this by checking whether keyis already or not by using in operator 
+
+if 300 in d1 :
+      print(d1[300])
+
+------------------------------------------------------------------------------------------------------------
+#How to update dictionaries ?
+'''
+d [key] = value
+
+If the key is not available then
+new entry will be added to the dictionary
+with the specified key-value pair.
+
+If the key is already then old value will be
+replaced with new value
+
+'''
+
+student_info={'rollno':101,'name':'Rakesh','marks':400}
+
+print('Student Info ')
+print(student_info)
+
+student_info['name']='Mohit'
+
+print('Updated Student Info ')
+print(student_info)
+
+student_info['location']='Delhi'
+
+print('Updated Student Info ')
+print(student_info)
+
+
+print('------- Student Info --------')
+for key, value in student_info.items():
+    print(f"{key} : {value}")
+	
+	@note- f in above line is formatted string , iska concepy smjh nhi aaya h mjhe@
+
+
+
+if we want to have keys and values seperately in dictionary then we will use
+print(student_info.keys())
+print(studnt_info.values())
+
+
+-------------------------------------------------------------------------------------------------
+
+How to delete elements from dictionary ?
+
+del d[key]    @d=name of the dictionary@
+
+It deletes entry associated with the specified key
+If the key is not available then we will get KeyError
+
+
+d1={}
+
+d1[101] =['rakesh',400,'Delhi']
+d1[102] =['sumit',500,'Mumbai']
+d1[103] =['deepak',200,'Goa']
+
+
+print('Student Info')
+
+for key , value in d1.items():
+    print(f"{key} : {value}")
+
+
+del d1[102]
+
+print('\n Updated Student Info')
+
+for key , value in d1.items():
+    print(f"{key} : {value}")
+
+del d1[102] #KeyError : 102
+---------------------------------------------------------------------------------------------------
+
+d.clear()  : To remove all entries form the dictionary 
+
+
+del d : To delete total dictionary. Now we cannot access d 
+
+
+---------------------------------------------------------------------------------------------------
+
+WAP to enter five bank record from user at runtime. 
+Eg :
+
+Accno 
+Name 
+Balance
+
+Then we perform some transaction using accno....
+1. Withdraw 
+2. Deposit
+3. Transfer
+
+
+---------------------------------------------------------------------------------------------------
+Important Functions of Dictionary:
+
+1. dict()
+
+To create a dictionary
+
+d1 = dict()  	-----> It creates empty dictionary
+
+d2 = dict({101 : 'Computer', 102 : 'Laptop'})
+
+d3 = dict([(101 , 'Computer'),(102,'Laptop'),(103,'Mobile')]) 
+
+print('Dictionary d1 ',d1)
+print('Dictionary d2 ',d2)
+print('Dictionary d3 ',d3)
+
+Output :
+Diction d1  {}
+Diction d2  {101: 'Computer', 102: 'Laptop'}
+Diction d3  {101: 'Computer', 102: 'Laptop', 103: 'Mobile'}
+-----------------------------------------------------------------------------------------
+
+2. len()  : Returns the number of items in the dictionary
+
+3. clear() : To remove all elements form the dictionary. 
+
+4. get() : To get the value associated with key 
+
+
+d.get(key)
+
+	If the key is available then return the corresponding value 	otherwise returns None. It won't raise any error or execption. 
+
+
+d.get(key,default_value)
+	If the key is avaialbe then return the corresponding value 	otherwise returns default value.
+
+	
+products = dict([(101 , 'Computer'),(102,'Laptop'),(103,'Mobile')]) 
+
+
+#product_name = products[105] #KeyError: 105
+
+product_name = products.get(105)
+print('Product Name ',product_name)
+
+product_name = products.get(105,'Product Not Found')
+print('Product Name ',product_name)
+
+product_name = products.get(101)
+print('Product Name ',product_name)
+
+Output :
+Product Name  None
+Product Name  Product Not Found
+Product Name  Computer
+
+--------------------------------------------------------------------------------------------
+5. pop() :
+	It removes the entry associated with the specifed key and returns the corresponding vlaue. 
+	If the specified key is not available the we will get KeyError. 
+
+language = {101:'Python',102:'Java',103:'Ruby',104:'Perl'}
+
+print('Language ',language)
+
+print('language.pop(102) : ',language.pop(102))
+
+print('Language ',language)
+
+#print('language.pop() : ',language.pop()) #TypeError: pop expected at least 1 argument, got 0
+
+
+if 105 in language :
+    print('language.pop(105) : ',language.pop(105)) #KeyError : 105
+else :
+    print('Key 105 is not avaialbe in language dictionary ')
+print('Language ',language)
+
+----------------------------------------------------------------------------------------------------------
+
+6. popitem() :
+	It remove an arbitrary item (key-value) from the dictionary and return it. 
+
+If the dictionary is empty then we will get KeyError 
+
+
+language = {101:'Python',102:'Java',103:'Ruby',104:'Perl'}
+
+print('Language ',language)
+
+print('language.popitme()',language.popitem())
+
+print('Language ',language)
+
+
+#If the dictionary is empty then we will get KeyError
+d = {}
+
+d.popitem()#KeyError: 'popitem(): dictionary is empty'
+------------------------------------------------------------------------------------------------------
+
+#7. keys() : It returns all keys associated with dictionary
+language = {101:'Python',102:'Java',103:'Ruby',104:'Perl'}
+print('Language ',language)
+print('language.keys() : ',language.keys())
+
+
+#8. values() : It returns all values associated with dictionary
+print('\n\nLanguage ',language)
+print('language.values() : ',language.values())
+
+
+#9 items(): It returns list of tuples represent key-value pair.
+print('\n\nLanguage ',language)
+print('language.items() : ',language.items())
+
+
+#Iteration of dictionary elements or items.
+print('\n\nLanguage Dictionary Items')
+for key, value in language.items():
+    print(f'{key} : {value}')
+
+-------------------------------------------------------------------------------------------------------
+#10 . copy() : To create exactly() duplicate dictionary ( cloned copy)
+
+language = {101:'Python',102:'Java',103:'Ruby',104:'Perl'}
+
+courses = language.copy()
+
+print('Language ',language)
+print('Id of language : ',id(language))
+
+print('\n\nCourses ',courses)
+print('Id of courses : ',id(courses))
+-------------------------------------------------------------------------------------------------------
+#11. setdeafult():
+'''
+d.setdefault(key,value) :
+	It the key is already available then this function returns the corresponding value. 
+	It the key is not available then the specified key-value will be added as new item to the dictionary. 
+'''
+
+language = {101:'Python',102:'Java',103:'Ruby',104:'Perl'}
+print('Language ',language)
+
+value = language.setdefault(102,'Java Script')
+print('\nValue : ',value)
+
+print('\nLanguage ',language)
+
+value = language.setdefault(105,'Java Script')
+print('\nValue : ',value)
+
+print('\nLanguage ',language)
+
+'''
+Output :
+Language  {101: 'Python', 102: 'Java', 103: 'Ruby', 104: 'Perl'}
+
+Value :  Java
+
+Language  {101: 'Python', 102: 'Java', 103: 'Ruby', 104: 'Perl'}
+
+Value :  Java Script
+
+Language  {101: 'Python', 102: 'Java', 103: 'Ruby', 104: 'Perl', 105: 'Java Script'}
+'''
+----------------------------------------------------------------------------------------------------------
+12. update():  All items present in the dictionary A will be added to dictionary B. 
+
+A = {101:'Mango',102:'Orange',103:'Kiwi'}
+B = {103 :'Saturday', 104:'Sunday',105:'Monday'}
+
+print('Dictionary A : ',A)
+print('\nDictionary B : ',B)
+
+
+B.update(A)
+print('\nDictionary B : ',B)
+--------------------------------------------------------------------------------------------------------
+Dictionary Comprehension :
+Comprehension conecpt applicable for dictionary also. 
+
+d_square = {1:1,2:4,3:9,4:16,5:25}
+
+
+d_cube = {1:1, 2:8, 3 :27, 4:64, 5:125 }
+
+d_square = { x : x * x for x in range(1,6)}
+print('d_square : ',d_square)
+
+
+d_cube = { x : x ** 3 for x in range(1,6)}
+print('\nd_cube : ',d_cube)
+-----------------------------------------------------------------------------------------------------------
+
+WAP to input string from user at runtime and make dictionary 
+example :  s1 = 'Python is very easy language'
+
+d1 = {'Python': 6, 'is':2,'very':4,'easy':4,'language': 8}
+
+
+
+
+s1= "python is very easy language"
+a = s1.split()
+d = {}
+
+for i in a:
+    d[i] = len(i)
+print(d)
+
+
+
+
+
+
+
+
+
+# SET DATA STRUCTURE(mathematical operation k lie use hota hai)
+ 
+1. If we want to represent a group of unique values as a single entity then we should go for set.
+2. Duplicates are not allowed.
+3. Insertion order is not preserved. But we can sort the elements.
+4. Indexing and slicing not allowed for the set.
+5. Heterogeneous elements are allowed.
+6. Set objects are mutable i.e once we creates set object we can perform any changes in that object    based on our requirement.
+7. We can represent set elements within curly braces and with comma seperation
+8. We can apply mathematical operations like union,intersection,difference etc on set objects.
+
+Creation of Set objects:
+Eg:
+s={10,20,30,40} 
+print(s) 
+print(type(s)) 
+ 
+Output
+ {40, 10, 20, 30} @insertion order not preserved@
+ <class 'set'> 
+
+We can create set objects by using set() function
+
+s=set(any sequence)
+
+Eg 1:
+l = [10,20,30,40,10,20,10] 
+s=set(l) 
+print(s) # {40, 10, 20, 30}
+
+Eg 2:
+s=set(range(5)) 
+print(s) #{0, 1, 2, 3, 4} 
+
+Note: While creating empty set we have to take special care.
+Compulsory we should use set() function.
+
+s={} ==>it is treated as empty dictionary
+
+Eg:
+s={} 
+print(s) 
+print(type(s)) 
+
+Output
+ {}
+ <class 'dict'> 
+
+
+Eg:
+s=set() 
+print(s) 
+print(type(s)) 
+ 
+Output
+ set() 
+ <class 'set'>
+====================================================================================
+
+#Important functions of set:
+
+1. add(x):
+
+Adds item x to the set
+Eg:
+s={10,20,30}
+print('Set s ',s)
+s.add(40); 
+print('After Add Element ',s) #{40, 10, 20, 30} 
+
+--------------------------------------------------------------------------------------------
+2. update(x,y,z):
+
+To add multiple items to the set.
+Arguments are not individual elements and these are Iterable objects like List,range etc.
+
+All elements present in the given Iterable objects will be added to the set.
+
+Eg:
+1. s={10,20,30} 
+2. l=[40,50,60,10] 
+3. s.update(l,range(5)) 
+4. print(s) 
+
+Output
+7. {0, 1, 2, 3, 4, 40, 10, 50, 20, 60, 30} 
+
+--------------------------------------------------------------------------------------
+Q. What is the difference between add() and update() functions in set?
+
+We can use add() to add individual item to the Set,where as we can use update() function to add multiple items to Set.
+
+ add() function can take only one argument where as update() function can take any number of arguments but all arguments should be iterable objects.
+
+------------------------------------------------------------------------------------
+Q. Which of the following are valid for set s?
+
+1. s.add(10)
+
+2. s.add(10,20,30) TypeError: add() takes exactly one argument (3 given)
+
+3. s.update(10) TypeError: 'int' object is not iterable
+
+4. s.update(range(1,10,2),range(0,10,2))
+
+------------------------------------------------------------------------------------
+#3. copy():
+
+Returns copy of the set.
+
+It is cloned object.
+
+s={10,20,30}
+s1=s.copy()
+print(s1)
+
+------------------------------------------------------------------------------------
+#4. pop():
+
+It removes and returns some random element from the set.
+Eg:
+s={40,10,30,20} 
+print(s) 
+print(s.pop()) 
+print(s) 
+
+
+------------------------------------------------------------------------------------
+#5. remove(x):
+It removes specified element from the set.
+If the specified element not present in the Set then we will get KeyError
+s={40,10,30,20}
+s.remove(30)
+print(s) # {40, 10, 20} 
+s.remove(50) ==>KeyError: 50
+
+
+------------------------------------------------------------------------------------
+#6. discard(x):
+'''
+It removes the specified element from the set.
+If the specified element not present in the set then we won't get any error.
+'''
+s={10,20,30}
+print('Value of Set Object s ',s)
+print('Id of Set Object s ',id(s))
+
+s.discard(10)
+
+print('\nAfter discard item from Set Object')
+print('Value of Set Object s ',s)
+print('Id of Set Object s ',id(s))
+
+s.discard(10)
+print('\nAfter discard item from Set Object')
+print('Value of Set Object s ',s)
+print('Id of Set Object s ',id(s))
+
+------------------------------------------------------------------------------------
+Q. What is the difference between remove() and discard() functions in Set?
+Q. Explain differences between pop(),remove() and discard() functions in Set?
+
+
+------------------------------------------------------------------------------------
+#7.clear():
+
+To remove all elements from the Set.
+
+1. s={10,20,30} 
+2. print(s) 
+3. s.clear() 
+4. print(s) 
+5. 
+6. Output
+7. {10, 20, 30} 
+8. set()
+================================================================
+
+============ Mathematical operations on the Set: ====================
+
+#1.union():
+
+x.union(y) ==>We can use this function to return all elements present in both sets
+
+x.union(y) or x|y
+
+Eg:
+set_x={10,20,30,40}
+
+set_y={30,40,50,60}
+
+print(set_x.union(set_y))   #Output : {10, 20, 30, 40, 50, 60}
+
+print(set_x|set_y)          #Output : {10, 20, 30, 40, 50, 60}
+
+
+------------------------------------------------------------------------------------
+#2. intersection():
+
+x.intersection(y) or x&y
+
+Returns common elements present in both x and y
+
+Eg:
+set_x={10,20,30,40}
+set_y={30,40,50,60}
+
+
+set_z = set_x.intersection(set_y)  or set_z=set_x&set_y
+
+print('Intersection of Set_x and Set_y ',set_z)
+
+#Output : {40, 30}
+
+
+
+------------------------------------------------------------------------------------
+
+#3. difference():
+
+x.difference(y) or x-y
+
+returns the elements present in x but not in y
+
+Eg:
+
+set_x={10,20,30,40}
+set_y={30,40,50,60}
+
+print(set_x.difference(set_y))  #Output : {10, 20}
+
+print(set_x-set_y)              #Output : {10, 20}
+
+print(set_y-set_x)              #Output : {50, 60}
+
+------------------------------------------------------------------------------------
+
+#4.symmetric_difference():
+
+x.symmetric_difference(y) or x^y
+
+Returns elements present in either x or y but not in both
+
+Eg:
+
+x={10,20,30,40}
+y={30,40,50,60}
+
+print(x.symmetric_difference(y)) #{10, 50, 20, 60}
+
+print(x^y) #{10, 50, 20, 60}
+
+===============================================================
+================= Membership operators: (in , not in) ===============
+Eg:
+s1 = set('Delhi')
+print('Value of set object s1 ',s1)
+
+print('h in s1 ','h' in s1)
+print('k in s1 ','k' in s1)
+
+'''
+Output :
+Value of set object s1  {'l', 'h', 'D', 'e', 'i'}
+h in s1  True
+k in s1  False
+'''
+
+
+#Set Comprehension:
+
+Set comprehension is possible.
+
+s={x*x for x in range(5)}
+print(s) #{0, 1, 4, 9, 16}
+
+s={2**x for x in range(2,10,2)}
+print(s) #{16, 256, 64, 4}
+
+set objects won't support indexing and slicing:
+
+Eg:
+
+s={10,20,30,40}
+
+print(s[0]) ==>TypeError: 'set' object does not support indexing
+print(s[1:3]) ==>TypeError: 'set' object is not subscriptable
+
+
+-----------------------------------------------------------------------------------
+Q.Write a program to eliminate duplicates present in the list?
+
+Approach-1:
+
+l=eval(input("Enter List of values: ")) 
+s=set(l) 
+print(s) 
+ 
+Output
+D:\Python_classes>py test.py 
+Enter List of values: [10,20,30,10,20,40] 
+{40, 10, 20, 30} 
+
+
+
+Approach-2:
+
+l=eval(input("Enter List of values: ")) 
+l1=[] 
+for x in l: 
+    if x not in l1: 
+
+l1.append(x) 
+print(l1) 
+ 
+Output
+D:\Python_classes>py test.py 
+Enter List of values: [10,20,30,10,20,40] 
+[10, 20, 30, 40] 
+
+----------------------------------------------------------------------
+
+Q. Write a program to print different vowels present in the given word?
+
+w=input("Enter word to search for vowels: ") 
+s=set(w) 
+v={'a','e','i','o','u'} 
+d=s.intersection(v) 
+print("The different vowel present in",w,"are",d) 
+ 
+Output
+D:\Python_classes>py test.py 
+Enter word to search for vowels: durga 
+The different vowel present in durga are {'u', 'a'}
+
+ ------------------------------------------------------------------------------------------------
+#Frozen Set Object : Immutable
+
+lst = [10,20,30,40,10,20,30,20,10]
+
+set_x = set(lst)
+print('Set_x ',set_x)
+print('Type of Set_x ',type(set_x))
+
+set_x.add(100)
+
+f_set = frozenset(lst)
+print('Frozenset f_set ',f_set)
+print('Type of f_set',type(f_set))
+f_set.add(100) #AttributeError: 'frozenset' object has no attribute 'add'

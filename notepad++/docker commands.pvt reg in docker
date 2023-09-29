@@ -1,0 +1,457 @@
+docker
+
+
+Namespace- isolated environment for containers,unique address to container is given by namespace
+C-group- allocation of resource shold be unique,sharing of resource should not be there.
+
+
+   13  apt install docker.io
+   14  apt update
+   15  apt install docker.io
+   16  apt install containerd
+   17  apt install docker.io
+   18  systemctl status docker
+   19  mkdir docker
+   20  cd docker/
+   21  vi app.py
+   22  vi Dockerfile
+   23  vi app.py
+   24  vi Dockerfile
+   25  ls
+   26  vi Dockerfile
+   27  docker images
+   32  docker build -t first:1.0 .
+   33  docker images
+   34  docker ps
+   35  docker ps -a
+   36  docker run -d --name first -p 8000:8080 first:1.0
+   37  docker ps
+   38  curl localhost:8000
+   39  vi app.py 
+   40  history 
+   
+   
+   
+   
+from flask import Flask 
+import os 
+app = Flask(__name__) 
+@app.route('/') 
+
+def hello(): 
+    return ('\nHello from Container World! \n\n')
+
+if __name__ == "__main__": 
+    app.run(host="0.0.0.0", port=8080, debug=True)
+    
+    
+    
+
+
+
+FROM ubuntu:20.04
+RUN apt update && apt install python3 -y && apt install python3-pip -y && pip3 install flask
+COPY app.py /opt
+EXPOSE 8080
+CMD ["python3", "/opt/app.py"]
+
+
+
+
+
+
+   41  cat app.py 
+   42  cat Dockerfile 
+   43  docker ps
+   44  docker logs first
+   45  docker exec -it first bash
+   46  docker ps
+   47  docker stop first
+   48  docker ps
+   49  docker ps -a
+   50  docker rm first
+   51  docker ps -a
+   52  docker run -d --name first -p 8000:8080 first:1.0
+   53  docker ps -a
+   54  docker status
+   55  docker ps -a
+   56  ls
+   57  docker cp Dockerfile first:/opt
+   58  docker exec -it first bash
+   59  ls
+   60  rm Dockerfile app.py 
+   61  ls
+   62  docker cp first:/opt/Dockerfile .
+   63  ls
+   64  docker cp first:/opt/app.py .
+   65  ls
+   66  vi app.py 
+   67  vi Dockerfile 
+   68  cd
+   69  git clone https://github.com/opencord/voltha.git
+   70  cd voltha/docker/
+   
+   
+   
+ 73  docker images
+   74  docker tag first:1.0 rajendrait99/first:1.0
+   75  docker images
+   76  docker push rajendrait99/first:1.0
+   77  docker login
+   78  docker push rajendrait99/first:1.0
+https://codeshare.io/
+https://forums.docker.com/t/docker-push-error-requested-access-to-the-resource-is-denied/64468/4
+
+
+
+docker login -u "myusername" -p "mypassword" docker.io
+docker push myusername/myimage:0.0.1
+
+
+
+
+
+
+
+
+DAY2
+ volume concept commands
+   84  docker ps -a
+   85  docker start first
+   86  docker ps -a
+   87  docker exec -it first bash
+   88  docker stop first
+   89  docker rm first
+   90  docker ps -a
+   91  docker run -d --name first -p 8000:8080 first:1.0
+   92  docker exec -it first bash
+   93  docker stop first
+   94  docker rm first
+   95  docker ps -a
+   96  ls /opt/
+   97  docker run -d --name first -p 8000:8080 -v /opt:/etc/lala first:1.0
+   98  docker exec -it first bash
+   99  ls /opt/
+  100  docker stop first
+  101  docker rm first
+  102  ls -al /opt/
+  103  docker run -d --name first -p 8000:8080 -v /opt:/etc/lala first:1.0
+  104  docker exec -it first bash
+  
+  
+  commands to see volumes nad how to create volumes
+  106  docker volume ls
+  107  docker volume -h
+  108  docker volume create test
+  109  docker volume ls
+  110  docker run -d --name second -p 8001:8080 -v /test:/etc/lala first:1.0
+  111  ls
+  112  ls /var/lib/docker/volumes/test/
+  113  docker volume -h
+  114  docker volume inspect test
+  115  docker volume
+  
+  
+  
+  cmd and entrypoint concept commands
+  117  mkdir test
+  118  cd test/
+  119  vi Dockerfile
+  120  docker build -t test:1.0 .
+  121  docker run -d --name test test:1.0
+  122  docker logs test
+  123  vi Dockerfile 
+  124  docker rm test
+  125  docker run -d --name test test:1.0 echo "Hello India"
+  126  docker logs test
+  127  vi Dockerfile 
+  128  docker build -t test:2.0 .
+  129  docker rm test
+  130  docker run -d --name test test:2.0 
+  131  docker logs first
+  132  docker logs test
+  133  vi Dockerfile 
+  134  docker rm test
+  135  docker run -d --name test test:2.0  "Hello India"
+  136  docker logs test
+  137  vi Dockerfile 
+  138  docker build -t test:3.0 .
+  139  docker rm test
+  140  docker run -d --name test test:3.0 
+  141  docker logs test
+  142  docker rm test
+  143  docker run -d --name test test:3.0  "Hello India"
+  144  docker logs test
+  145  vi Dockerfile
+  
+  
+  
+  vvi [three situation regarding cmd and entrypoint]
+  
+FROM ubuntu:20.04
+CMD ["echo", "Hello World"]
+
+
+FROM ubuntu:20.04
+ENTRYPOINT ["echo", "Hello World"]
+
+
+FROM ubuntu:20.04
+ENTRYPOINT ["echo"]
+CMD ["Hello World"]
+
+
+
+
+
+docker private registry commands
+
+  147  docker ps -a
+  148  docker stop first second
+  149  docker rm test first second
+  150  docker ps -a
+  151  docker run -d --name registry -p 5000:5000 registry:2
+  152  docker ps
+  153  docker images
+  154  docker rmi  958897a09c86  5a7e497a2e4d  753499daa7c8
+  155  docker ps -a
+  156  docker images
+  157  docker tag first:1.0 localhost:5000/first:1.0
+  158  docker images
+  159  docker push localhost:5000/first:1.0
+  
+  160  curl localhost:5000/v2/_catalog
+ (this is used to see the image in private registry)
+  
+  161  #docker run -d --name registry -p 5000:5000 -v /opt:/var/lib/registry registry:2  
+(private registry will be stored in this path)
+
+
+docker networking commands
+ 167  docker build -t first:1.0 .
+  168  docker ps -a
+  169  docker stop registry
+  170  docker rm registry
+  171  docker network ls
+  172  docker network inspect bridge
+  173  ifconfig 
+  174  docker run -d --name second -p 8001:8080 -v /test:/etc/lala first:1.0
+  175  ifconfig 
+  176  docker network inspect bridge
+  177  
+  
+  
+ creating custom docker network(nafees)and creating container inside that nafees network  
+  179  docker network ls
+  180  docker network create mynet --subnet=192.168.0.0/16
+  181  docker network ls
+  182  docker network inspect mynet
+  183  docker run -d --name second -p 8001:8080 -v /test:/etc/lala --network nafees first:1.0
+  184  docker run -d --name third -p 8002:8080 -v /test:/etc/lala --network nafees first:1.0
+  185  docker network inspect mynet
+  
+  
+  
+  
+  Day3
+  docker compose
+  
+  190  git clone https://github.com/rskTech/k8s_material.git
+  191  cd k8s_material/docker_compose/
+  192  ls
+  193  vi app.py 
+  194  vi Dockerfile 
+  195  ls
+  196  vi requirements.txt 
+  197  vi Dockerfile 
+  198  rm compose.yaml 
+  199  vi compose.yaml
+  200  docker-compose
+  201  apt  install docker-compose
+  202  docker ps -a
+  203  docker rm third second
+  204  docker ps -a
+  205  docker-compose -f compose.yaml up -d
+  206  vi ~/voltha/compose/docker-compose-system-test.yml 
+  207  vi compose.yaml
+  208  docker-compose -f compose.yaml up -d
+  209  vi compose.yaml
+  210  docker-compose -f compose.yaml up -d
+  211  docker ps =a
+  212  docker ps -a
+  213  curl localhost:5000
+  214  curl localhost:5000:q
+  215  docker ps -a
+  216  vi compose.yaml 
+  217  docker-compose -f compose.yaml down
+  218  docker ps -a
+  219  docker-compose -f compose.yaml up -d
+  220  docker ps -a
+  221  curl localhost:5000
+  222  vi app.py 
+  223  vi compose.yaml 
+  224  docker-compose -f compose.yaml down
+  225  docker-compose -f compose.yaml up -d
+  226  docker ps -a
+  227  curl localhost:5000
+  228  docker-compose -f compose.yaml down
+  229  docker ps -a
+  230  docker stop dockercompose_backend_1
+  231  docker rm dockercompose_backend_1
+  232  docker ps -a
+  233  docker-compose -f compose.yaml up -d
+  234  curl localhost:5000
+  235  vi compose.yaml 
+  236  vi app.py 
+  237  vi compose.yaml  
+  
+  
+  
+  Dockercompose file
+  
+    
+version: "2"
+services:
+      frontend:
+           build: .
+           ports:
+                - "5000:5000"
+           volumes:
+                - /opt:/etc/lala
+           environment:
+                myname: simplilearn
+           networks:
+                - mynet
+           links:
+                - redis
+      redis:
+           image: redis:latest
+           ports:
+                - "6379"
+           networks:
+                - mynet
+networks:
+        mynet:
+		
+		
+		
+		
+		
+docker swarm
+       docker swarm init (we will get join url,paste it on worker node and join)
+	   docker node ls (it is used to see the connected node to the manager)
+	   
+       docker service ls
+  263  docker service create --name myweb --replicas 3 nginx:latest
+  264  docker service ls
+  265  docker service inspect myweb
+  266  docker service ps myweb
+  267  docker service rm myweb
+  268  docker service ls
+  269  docker service create --name myweb --replicas 5 nginx:latest
+  270  docker service ps myweb
+  271  docker service rm myweb
+  272  docker service ls
+  273  docker service create --name myservice  --mode global nginx:latest
+  274  docker service ls
+  275  docker service ps myweb
+  276  docker service ps myservice
+  
+  
+  docker swarm networking (overlay network is used)
+  
+  
+  279  docker node ls
+  280  docker network ls
+  281  docker network prune
+  282  docker ps -a
+  283  docker stop dockercompose_redis_1  dockercompose_frontend_1
+  284  docker rm  dockercompose_redis_1  dockercompose_frontend_1
+  285  docker ps -a
+  286  docker network prune
+  287  docker network ls
+  288  docker network create -d overlay mynet
+  289  docker network ls
+  290  docker network inspect mynet
+  291  docker service ls
+  292  docker service rm myservice
+  293  docker service ls
+  294  docker service create --name myservice --publish target=80,published=80 --replicas=5 --network mynet
+  295  docker service create --name myservice --publish target=80,published=80 --replicas=5 --network mynet nginx:latest
+  296  docker network ps myservice
+  297  docker service  ps myservice
+  298  docker network inspect mynet
+  299  curl localhost:80
+  
+  
+  
+  docker swarm security
+  
+  docker swarm update --autolock=true
+  303  systemctl restart docker
+  304  systemctl status docker
+  305  docker service ls
+  306  docker swarm unlock
+  307  docker service ls
+  308   docker swarm update --autolock=false (ye bhi try krke dekhna hai .. false karke dekho )
+  
+  docker drain node on swarm
+ 
+  311  systemctl restart docker
+  312  docker service  ps myservice
+  313  docker service ls
+  314  docker service ps myservice
+  316  docker node update --availability drain ip-172-31-2-132
+  317  docker node ls
+  318  docker service ps myservice
+  
+  
+  
+  
+  day4
+  
+   323  cd voltha/compose/
+  324  ls
+  325  vi docker-compose-system-test.yml
+  326  cd
+  327  docker servic els
+  328  docker service ls
+  329  docker service rm myservice
+  330  docker service ls
+  331  docker service create --replicas 3 --name redis redis:latest
+  332  docker service ls
+  333  docker service ps  redis
+  334  docker service inspect redis  (it is used to inspect and thing and it will be in json format)
+  335  docker service inspect --pretty redis  (it is used to inspect,and thing will be in normal way so that we can understand easily)
+  
+    337  docker node ls
+  338  docker service ls
+  339  docker service rm redis
+  340  docker service ls
+  341  docker node ls
+  342  docker node update --availability active ip-172-31-2-132 (command to make node active if drained)
+  343  docker node update --availability active ip-172-31-2-132
+  344  docker node ls
+  345  docker node update --availability drain ip-172-31-1-70(command to make node drained)
+  346  docker node update --availability drain ip-172-31-11-190
+  347  docker service ls
+  348  docker node ls
+  349  docker service create --name registry --publish target=5000,published=5000 registry:2 (command to make private registry)
+  350  docker service ls
+  351  docker service ps
+  352  docker service ps  registry
+  353  curl localhost:5000/v2
+  354  curl localhost:5000/v2/_catalog
+  355  cd k8s_material/docker_compose/
+  356  vi compose.yaml 
+  357  docker-compose up -d
+  358  ls
+  359  docker-compose -f compose.yaml up -d (command to make containers up from dockercompose file , multiple container at a time)
+  360  vi compose.yaml 
+  361  docker-compose -f compose.yaml down(command to make containers down from dockercompose file , multiple container at a time)
+  362  docker-compose -f compose.yaml up -d
+  363  docker ps -a
+  364  docker images
+  365  curl localhost:5000/v2/_catalog
+  366  docker-compose push
+  367  docker-compose push -f compose.yaml

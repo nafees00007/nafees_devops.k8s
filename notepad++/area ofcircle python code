@@ -1,0 +1,22 @@
+
+ 230510428038
+ Naghma@786
+ 
+ Waquar@007
+ 
+ 
+AREA OF CIRCLE CODE
+ 
+Eg-1
+r=int(input("give radius"))
+area=3.14*(r**2)
+print(area)
+
+Eg-2
+import math
+radius=float(input("enter radius"))
+area=math.pi*radius**2
+perimeter=math.pi*2*radius
+print("area of circle",area)
+print("perimeter of circle",perimeter)
+

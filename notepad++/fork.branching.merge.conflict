@@ -1,0 +1,90 @@
+29/04/2023
+
+Steps for Forking a repo
+1)	Go to the login environment of the GitHub
+2)	Navigate to the respective repository which is to be forked
+3)	Find out the fork button on the repository page and click on it
+4)	Now you will be navigated to a repository which is a forked copy of the project
+Steps for Creating a pull request
+1)	Make some changes in the forked copy
+2)	Commit the same
+3)	Go to Pull request menu
+4)	Select the repo from where you want to create a pull request
+5)	Now click on create merge request button
+6)	Once this process is done wait for the repository owner to accept or reject your request
+7)	Based on the decision the acceptance or rejection will be visible
+Steps to pull the updates from the main repo to forked repo
+1)	Got to forked repo of our account on GitLab
+2)	Click on pull requests
+3)	Click on button of new pull request
+4)	Click on the base repo drop down
+5)	Change it to your repo
+6)	Page reloads
+7)	Click on compare across forks
+8)	Now you will be able to select base as your and head as the original repo
+9)	Once the page refreshes >> you will see the updates to be fetched from the original repo
+10)	Click on create pull request and pull the changes to your repo.
+
+
+
+
+
+
+Steps for Branching
+1)	Create a new repo
+2)	Add a new file and commit the changes
+3)	Run the command to see the list of branches
+4)	Only main branch visible
+5)	Create a new branch with the name develop
+6)	Move inside the develop branch
+7)	Create a new branch feature1
+8)	Create a new branch feature2
+9)	Run the command to see the list of branches
+10)	4 branches with their names visible
+11)	Now delete
+
+
+
+Merge 
+
+steps with fastforward
+1)	Create a repo
+2)	Add readme.txt and commit it as “m1”
+3)	Modify the readme.txt and commit it as “m2”
+4)	Create a branch as “feature”
+5)	Checkout to feature branch
+6)	Add feature.txt and commit it as “f1”
+7)	Modify the feature.txt and commit it as “f2”
+8)	Go to main 
+9)	Run merge feature
+Steps with recursive merge without conflict
+1)	Create a repo
+2)	Add readme.txt and commit it as “m1”
+3)	Modify the readme.txt and commit it as “m2”
+4)	Create a branch as “feature”
+5)	Checkout to feature branch
+6)	Add feature.txt and commit it as “f1”
+7)	Modify the feature.txt and commit it as “f2”
+8)	Now checkout main and edit the readme.txt and commit it as “m3”
+9)	Git merge feature
+10)	Vim tool will open and it will ask you for a merge commit message
+11)	Once done run the log and now you can see the merge commit.
+
+
+Steps for Merge with conflict
+12)	Create a repo
+13)	Add readme.txt and commit it as “m1”
+14)	Modify the readme.txt and commit it as “m2”
+15)	Create a branch as “feature”
+16)	Checkout to feature branch
+17)	Add feature.txt and commit it as “f1”
+18)	Modify the feature.txt and commit it as “f2”
+19)	Now checkout main and edit the readme.txt and commit it as “m3”
+20)	Checkout to feature
+21)	Edit the readme.txt and make some changes and commit it as “f3”
+22)	Checkout to main
+23)	Git merge feature
+24)	Now you will see a conflict response
+25)	Now open the readme.txt file and you will see the conflict response
+26)	Edit the file with the finalized content
+27)	Go to git bash and run status and commit the change.

@@ -1,0 +1,162 @@
+ATM CODE 
+
+#WAP to enter five bank record from user at runtime. 
+'''
+Eg :
+Accno 
+Name 
+Balance
+
+Then we perform some transaction using accno....
+1. Withdraw 
+2. Deposit
+3. Transfer
+'''
+
+bank={}
+
+'''
+for i in range(5):
+    accno=int(input('Enter Account No : '))
+    name = input('Enter Name : ')
+    balance = input('Enter Balance : ')    
+    bank[accno]={'name':name,'balance':balance}
+'''
+
+bank={101: {'name': 'Rakesh', 'balance': '15000'}, 102: {'name': 'Kapil', 'balance': '25000'}, 103: {'name': 'Sumit', 'balance': '50000'}, 104: {'name': 'Dinesh', 'balance': '75000'}, 105: {'name': 'Gautam', 'balance': '24000'}}
+
+for key,value in bank.items():
+    print(f'{key} : {value}')
+
+print('-------------------------------------------\n')
+
+s_accno = int(input('Search Account No : '))
+
+s_account_flage=False
+
+if s_accno in bank:
+    name = bank[s_accno]['name']
+    balance = bank[s_accno]['balance']
+    print('Welcome to SBI Bank')
+    print('Account No : ',s_accno)
+    print('Name       : ',name)
+    print('Balance    : ',balance)
+    s_account_flage=True
+    
+else:
+    print('Not Account Found')
+
+if s_account_flage == True:
+    print('1. Withdraw : ')
+    print('2. Deposit   : ')
+    print('3. Transer : ')
+
+    option = int(input('Selact any option : '))
+
+    if option == 1:
+        w_amt = int(input('Enter withdraw amount : '))
+        if int(balance) >= w_amt:
+            balance = int(balance) - w_amt
+            print(f'Rs {w_amt} succefully withdraw')
+            print(f'Remaining balance is Rs {balance}')
+            bank[s_accno]['balance']=balance
+        else:
+            print('Insufficient Balance')
+    elif option == 2:
+        print('Deposite')
+    elif option == 3:
+        print('Balance ')
+    else:
+        print('Invalid Option ')
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+FOR Y TO CONTINUE AND X TO EXIT WALA CODE:-
+	
+
+
+
+
+#WAP to enter five bank record from user at runtime. 
+'''
+Eg :
+Accno 
+Name 
+Balance
+
+Then we perform some transaction using accno....
+1. Withdraw 
+2. Deposit
+3. Transfer
+'''
+
+bank={}
+
+'''
+for i in range(5):
+    accno=int(input('Enter Account No : '))
+    name = input('Enter Name : ')
+    balance = input('Enter Balance : ')    
+    bank[accno]={'name':name,'balance':balance}
+'''
+
+bank={101: {'name': 'Rakesh', 'balance': '15000'}, 102: {'name': 'Kapil', 'balance': '25000'}, 103: {'name': 'Sumit', 'balance': '50000'}, 104: {'name': 'Dinesh', 'balance': '75000'}, 105: {'name': 'Gautam', 'balance': '24000'}}
+
+for key,value in bank.items():
+    print(f'{key} : {value}')
+
+print('-------------------------------------------\n')
+
+while True:
+    
+    s_accno = int(input('Search Account No : '))
+
+    s_account_flage=False
+
+    if s_accno in bank:
+        name = bank[s_accno]['name']
+        balance = bank[s_accno]['balance']
+        print('Welcome to SBI Bank')
+        print('Account No : ',s_accno)
+        print('Name       : ',name)
+        print('Balance    : ',balance)
+        s_account_flage=True
+        
+    else:
+        print('Not Account Found')
+
+    if s_account_flage == True:
+        print('1. Withdraw : ')
+        print('2. Deposit   : ')
+        print('3. Transer : ')
+
+        option = int(input('Selact any option : '))
+
+        if option == 1:
+            w_amt = int(input('Enter withdraw amount : '))
+            if int(balance) >= w_amt:
+                balance = int(balance) - w_amt
+                print(f'Rs {w_amt} succefully withdraw')
+                print(f'Remaining balance is Rs {balance}')
+                bank[s_accno]['balance']=balance
+            else:
+                print('Insufficient Balance')
+        elif option == 2:
+            print('Deposite')
+        elif option == 3:
+            print('Balance ')
+        else:
+            print('Invalid Option ')
+    option = input('Press Y to continue or X to exit : ')
+    if option == 'X' or option == 'x' :
+        print('Thank you for visit SBI Bank')
+        break
+            
+        
