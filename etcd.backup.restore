@@ -1,0 +1,74 @@
+sudo apt install etcd-client
+
+kubectl get pods -n kube-system
+
+kubectl describe pods <etcd-pod-name> -n kube-system 
+
+
+export advertise_url=<<advertise-client-url>>
+echo $advertise_url
+
+sudo ETCDCTL_API=3 etcdctl \
+--endpoints $advertise_url \
+--cacert /etc/kubernetes/pki/etcd/ca.crt \
+--key /etc/kubernetes/pki/etcd/server.key \
+--cert /etc/kubernetes/pki/etcd/server.crt snapshot save etcd_backup.db
+
+
+
+ls -lhrt
+
+
+
+sudo ETCDCTL_API=3 etcdctl \
+--endpoints $advertise_url \
+--cacert /etc/kubernetes/pki/etcd/ca.crt \
+--key /etc/kubernetes/pki/etcd/server.key \
+--cert /etc/kubernetes/pki/etcd/server.crt snapshot restore etcd_backup.db
+
+ETCDCTL_API=3 etcdctl --write-out=table snapshot status /home/ubuntu/etcdback/backup.db  command to see backup in table format
+
+
+sudo chown -R etcd:etcd /var/lib/etcd
+
+command to check:-
+sudo ETCDCTL_API=3 etcdctl get cluster.name \
+--endpoints $advertise_url \
+--cacert /etc/kubernetes/pki/etcd/ca.crt \
+--key /etc/kubernetes/pki/etcd/server.key \
+--cert /etc/kubernetes/pki/etcd/server.crt
+
+
+
+docker cp kind-control-plane:/etc/ 
+
+
+below three command is same as above three .... in these commands, the path shown is our path where certificates are present in my kind cluster.
+I have copied my certificates from /etc/kubernetes/pki/etcd inside the kind-control-plane to our host machine on /etcd.
+
+
+ETCDCTL_API=3 etcdctl \
+--endpoints $advertise_url \
+--cacert /home/ubuntu/etcdback/etcd/ca.crt \
+--key /home/ubuntu/etcdback/etcd/server.key \
+--cert /home/ubuntu/etcdback/etcd/server.crt snapshot save /home/ubuntu/etcdback/backup.db
+
+
+
+ETCDCTL_API=3 etcdctl \
+--endpoints $advertise_url \
+--cacert /home/ubuntu/etcdback/etcd/ca.crt \
+--key /home/ubuntu/etcdback/etcd/server.key \
+--cert /home/ubuntu/etcdback/etcd/server.crt snapshot restore /home/ubuntu/etcdback/backup.db
+
+
+
+
+/home/labsuser/etcdbackup/etcd_backup.db
+
+
+ETCDCTL_API=3 etcdctl get cluster.name \
+--endpoints $advertise_url \
+--cacert /home/labsuser/etcdbackup/etcd/ca.crt \
+--key /home/labsuser/etcdbackup/etcd/server.key \
+--cert /home/labsuser/etcdbackup/etcd/server.crt
