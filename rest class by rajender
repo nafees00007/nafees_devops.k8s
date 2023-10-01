@@ -1,1 +1,845 @@
-Create 
+RAJENDRA 
+
+static pod concept
+
+
+804  k get ns
+  805  k get po -n kube-system
+  806  k get po -n kube-system -o wide
+  807  ls
+
+  809  ps -ef | grep kubelet
+  810  docker ps
+  811  #docker exec -it kind-control-plane bash
+  812  ps -ef | grep kubelet
+  813  cat /var/lib/kubelet/config.yaml
+  814  cd /etc/kubernetes/manifests/
+  815  ls
+  816  k get po
+  817  k delete po nginx
+  818  k get po -n kube-system
+  819  pwd
+  820  k get po
+  821  k run nginx --image=nginx --port=80 --dry-run=client -o yaml > pod.yaml
+  822  k get po
+  823  k get po -o wide
+  824  ls
+  825  rm pod.yaml 
+  826  k get po -o wide
+  
+  
+  
+  
+  lecture6 by rajendra 
+  
+  
+    834  #kind delete cluster
+  835  vi ~/.kube/config 
+  836  kind create cluster 
+  837  vi ~/.kube/config 
+  838  k get no
+  839  alias k=kubectl
+  840  k get no
+  841  k config get-users               list of users
+  842  k config -h                     all possible operation help will come
+  843  k config get-clusters      list of cluster we will get 
+  844  k config get-contexts     list of context 
+  845  k config use-context kubernetes-admin@kubernetes     used to switch between cluster
+  846  k get no
+  847  k config use-context kind-kind
+  848  k get no
+  
+  
+  
+  
+  kind create cluster --name mycluster          used to make another kind cluster with custom name 
+  kind delete cluster --name mycluster
+  
+  
+  
+  
+  
+  RBAC CONCEPT
+  lets say i am making a user name nafees
+  
+  openssl genrsa -out nafees.key 2048
+  openssl req -new -key nafees.key -out nafees.csr -subj "/CN=nafees/O=dev"
+  
+  uper k dono command k baad hamen nafees.key and nafees.csr mil jaega. master node ke /etc/kubernetes/pki k ander se ca.crt and ca.key copy krke le aao.
+  
+  openssl x509 -req -in nafees.csr -CA ca.crt -CAkey ca.key  -CAcreateserial -out nafees.crt -days 365
+  es command k baad mjhe nafees.crt bhi mil jaega
+  
+  these are those 3 command which is run after getting nafees.crt,nafees.key,ca.crt to make config file from method1
+  kubectl --kubeconfig nafees.kubeconfig config set-cluster kubernetes --server https://172.31.5.185:6443 --certificate-authority=ca.crt
+  kubectl --kubeconfig nafees.kubeconfig set-credentials nafees --client-certificate /home/labsuser/kind/rbac/nafees.crt --client-key /home/labsuser/kind/rbac/nafees.key
+  kubectl --kubeconfig nafees.kubeconfig config set-context nafees.k8s --cluster kubernetes --namespace default --user nafees
+  
+  
+  
+  
+    919  openssl genrsa -out nafees.key 2048
+  920  ls
+  921  openssl req -new -key nafees.key -out nafees.csr -subj "/CN=nafees/O=examplegroup"
+  922  ls
+  923  openssl x509 -req -in nafees.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key  -CAcreateserial -out john.crt
+  openssl x509 -req -in nafees.csr -CA ca.crt -CAkey ca.key  -CAcreateserial -out nafees.crt -days 365
+  924  k config set-credentials john --client-certificate=/home/labsuser/john.crt --client-key=/home/labsuser/john.key 
+  925  k config set-context mycontext --user=john --cluster=kubernetes
+  926  k apply -f role.yaml 
+  927  k create rolebinding myrolebinding --role=pod-reader --user=john
+  928  k delete rolebinding myrolebinding
+  929  k create rolebinding myrolebinding --role=pod-reader --user=john
+  930  k config use-context mycontext
+  931  k get po
+  932  k run nginx --image=nginx --port=80
+  933  vi role.yaml
+  
+  
+  
+  
+  
+  https://github.com/rskTech/k8s_material/blob/master/RBAC/steps
+  
+  cat role.yml
+  
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+
+some commands is missing here ***
+
+
+RESOURCE ALLOCATION TO PODS
+concept of giving resources to pod so that there is no issue . we will fix the min and max value of resources (cpu and memory).
+lets say we have 3 pods running on node... one pod is having memory leak , in that case that pod will continously useing resource more than required
+in that case other pod will suffer Hence we fix the max and minumum resources to be used by the pods by defining as below
+resources:
+       requests:
+              cpu: 1m
+              memory: 200M
+       limits:
+               cpu: 2m
+               memory: 400M
+			   
+			   
+			   
+
+  940  k apply -f pod.yaml 
+  941  k get po
+  942  k get no
+  943  k get po
+  944  k describe po nginx
+  945  k get po
+  
+ vi pod.yaml 
+  
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    ports:
+    - containerPort: 80
+    resources:
+       requests:
+              cpu: 1m
+              memory: 200M
+       limits:
+               cpu: 2m
+               memory: 400M
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+k describe po nginx    we an see the resource allocation there 
+
+
+
+
+
+RESOURCE QUOTA CONCEPT 
+in this we r going to define the quota to each namespace so that no issue happen between namespace on resource allocation basis
+  950  k create ns qa
+  951  k apply -f rq.yaml 
+  952  vi rq.yaml 
+  953  vi pod.yaml 
+  954  k apply -f pod.yaml 
+  955  vi rq.yaml 
+  956  k delete resourcequota myquota
+  957  k get quota
+  958  k get quota -n qa
+  959  k delete quota myquota -n qa
+  960  k apply -f rq.yaml 
+  961  k apply -f pod.yaml 
+  962  k get quota -n qa
+  963  vi pod.yaml 
+  964  k apply -f pod.yaml
+  
+  
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+        name: myquota
+        namespace: qa
+spec:
+     hard:
+        cpu: 4m
+        memory: 500M
+        pods: 3
+        
+
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx1
+  namespace: qa
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    ports:
+    - containerPort: 80
+    resources:
+       requests:
+              cpu: 3m
+              memory: 200M
+       limits:
+               cpu: 3m
+               memory: 300M
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+
+If we try to make another pod in qa namespace then permission will be denied because the resource given to namespace qa is used by nginx pod .. no resource left.
+
+
+
+
+
+
+NODE MAINTAINANNCE
+
+drain the pod then it will not be part of cluster,scheduling will be disabled on this node.. do the maintainance work and then do uncorden.
+
+the pod running on ha mode will get deployed on other nodes. stand alone pod will get deleted permanently and the daemonset pod will also get deleted
+but daemonset pod will appear when we uncorden the node.
+
+
+
+
+  968  k get all
+  969  k get po -o wide
+  970  k create deploy mydeploy --image=nginx 
+  971  k scale deploy mydeploy --replicas=5
+  972  k get po -o wide
+  973  k get no
+  974  k drain worker1
+  975  k drain worker1 --force --ignore-daemonsets
+  976  k get po -o wide
+  977  k get no
+  978  k uncordon worker1
+  979  k get no
+  
+  
+  
+  
+  
+  NETWORK POLICY CONCEPT..... 
+  
+   1002  alias k=kubectl
+ 1003  k get no
+ 1004  vi np.yaml
+ 1005  k api-resources
+ 1006  vi np.yaml 
+ 1007  k get all
+ 1008  k delete deploy mydeploy
+ 1009  k get all
+ 1010  k delete svc mysvc
+ 1011  k get all
+ 1012  k run nginx1 --image=nginx --port=80
+ 1013  k run nginx2 --image=nginx --port=80
+ 1014  k run nginx3 --image=nginx --port=80
+ 1015  k get po -o wide
+ 1016  k exec -it nginx2 bash
+ 1017  k get po -o wide
+ 1018  k exec -it nginx3 bash
+ 1019  k get po -o wide
+ 1020  vi np.yaml 
+ 1021  k get po --show-labels
+ 1022  k label po nginx1 role=db
+ 1023  k label po nginx2 role=frontend
+ 1024  k get po --show-labels
+ 1025  vi np.yaml 
+ 1026  k apply -f np.yaml 
+ 1027  k get netpol
+ 1028  k get po -o wide
+ 1029  k exec -it nginx2 bash
+ 1030  k exec -it nginx3 bash
+ 1031  k get no --show-labels
+ 1032  k get po --show-labels
+ 
+ 
+ 
+ 
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: frontend
+              
+              
+              
+              
+              
+              
+==========Kind cluster========
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+networking:
+  disableDefaultCNI: true # disable kindnet
+  podSubnet: 192.168.0.0/16 # set to Calico's default subnet
+  
+  
+  
+kind create cluster --config config
+
+kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
+
+
+
+
+NODESELECTOR CONCEPT
+
+ 1004  k get all
+ 1005  k delete po nginx
+ 1006  k get no --show-labels
+ 1007  k label no worker1 hdd=ssd
+ 1008  k get no --show-labels
+ 1009  vi pod.yaml 
+ 1010  k apply -f pod.yaml 
+ 1011  k get po -o wide
+ 1012  k delet epo nginx
+ 1013  k delete po nginx
+ 1014  k label no worker1 hdd-
+ 1015  k apply -f pod.yaml 
+ 1016  k get po
+ 1017  k describe po nginx
+ 
+ 
+ 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  nodeSelector:
+          hdd: ssd
+  containers:
+  - image: nginx
+    name: nginx
+    ports:
+    - containerPort: 80
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+NODEAFFINITY CONCEPT
+
+ 1020  k explain po.spec
+ 1021  k explain po.spec.affinity
+ 1022  k explain po.spec.affinity.nodeAffinity
+ 1023  k explain po.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution
+ 1024  k get no --show-labels
+ 1025  k label no worker1 hdd=ssd
+ 1026  k get no --show-labels
+ 1027  vi pod.yaml 
+ 1028  k apply -f pod.yaml 
+ 1029  vi pod.yaml 
+ 1030  k apply -f pod.yaml 
+ 1031  vi pod.yaml 
+ 1032  k apply -f pod.yaml 
+ 1033  :q
+ 1034  k delete po nginx
+ 1035  k apply -f pod.yaml 
+ 1036  vi pod.yaml 
+ 1037  k apply -f pod.yaml 
+ 1038  k get po -o wide
+ 1039  vi pod.yaml
+ 
+ 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  affinity:
+          nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                          nodeSelectorTerms:
+                                  -    matchExpressions:
+                                          - key: hdd
+                                            operator: In
+                                            values:
+                                                  - ssd
+  containers:
+  - image: nginx
+    name: nginx
+    ports:
+    - containerPort: 80
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+PODAFFINITY CONCEPT
+ 1010  k explain po.spec.affinity.podAffinity
+ 1011  k explain po.spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution
+ 1012  k explain po.spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution.labelSelector
+ 1013  k explain po.spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution.labelSelector.matchExpressions
+ 1014  k get no --show-labels
+ 1015  vi pod.yaml 
+ 1016  k apply -f pod.yaml 
+ 1017  vi pod.yaml 
+ 1018  k apply -f pod.yaml 
+ 1019  vi pod.yaml 
+ 1020  k apply -f pod.yaml 
+ 1021  vi pod.yaml 
+ 1022  k apply -f pod.yaml 
+ 1023  k get po -o wide
+ 1024  k get po --show-labels
+ 1025  vi pod.yaml 
+ 1026  k dleete po nginx
+ 1027  k delete po nginx
+ 1028  k run nginx --image=nginx --port=80
+ 1029  k get po -o wide
+ 1030  k delete po nginx1
+ 1031  k get po
+ 1032  k get po -o wide
+ 1033  k apply -f pod.yaml 
+ 1034  k get po -o wide
+ 1035  vi pod.yaml 
+ 1036  k get no --show-labels
+ 1037  vi pod.yaml 
+ 1038  k delete po nginx1
+ 1039  k apply -f pod.yaml 
+ 1040  k get po -o wide
+ 
+ 
+ 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx1
+  name: nginx1
+spec:
+  affinity:
+      podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+               -      labelSelector:
+                              matchExpressions:
+                                      - key: run
+                                        operator: In
+                                        values:
+                                         - nginx
+                      topologyKey: kubernetes.io/hostname 
+  containers:
+  - image: nginx
+    name: nginx
+    ports:
+    - containerPort: 80
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+PODANTIAFFINITY
+It is just opposite of podAffinity
+
+
+
+ETCD BACKUP RESTORE
+
+
+
+1062  ETCDCTL_API=3 etcdctl snapshot save etcd_backup.db --endpoints=https://172.31.15.140:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key
+k describe po etcd-master -n kube-system      from here we will get http://172.31.15.140:2379 which is used above
+
+ 1064  k get po
+ 1065  k delete po nginx nginx1
+ 1066  k run nginx5 --image=nginx --port=80
+ 1067  k get po
+
+
+ 1076  ETCDCTL_API=3 etcdctl --data-dir=/home/labsuser --endpoints=https://172.31.15.140:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key  snapshot restore etcd_backup.db
+
+/home/labuser/default.etcd  add this path in /etc/kubernetes/manifests/etcd.yaml at hostPath
+
+
+ 1080  ls
+ 1081  pwd
+ 1082  vi /etc/kubernetes/manifests/etcd.yaml 
+ 1083  pwd
+ 1084  vi /etc/kubernetes/manifests/etcd.yaml 
+ 1085  k get po -n kube-system
+ 1086  vi /etc/kubernetes/manifests/etcd.yaml 
+ 1087  k get no
+ 1088  k get po -n kube-system
+ 
+ 
+ 
+ 
+ class10
+ 
+ READYNESS AND LIVENESS PROBE CONCEPT
+  1203  k get no
+ 1204  k explain po.spec.containers.readinessProbe
+ 1205  vi pod.yaml 
+ 1206  k get all
+ 1207  k delete po nginx nginx1
+ 1208  k get all
+ 1209  k apply -f pod.yaml     this yaml file is having port other than 80...so our app will not get statrted.becox my app is runing on nginx 80
+ 1210  k get po
+ 1211  k describe po nginx
+ 1212  k get po
+ 1213  vi pod.yaml 
+ 1214  k delet epo nginx1
+ 1215  k delete po nginx1
+ 1216  k apply -f pod.yaml   this time we have given the port 80
+ 1217  k get po
+ 
+ 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx1
+  name: nginx1
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    ports:
+    - containerPort: 80
+    readinessProbe:
+            initialDelaySeconds: 4
+            periodSeconds: 2
+            httpGet:
+                path: /
+                port: 80
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+
+
+
+
+
+CONCEPT OF CLUSTER UPGRADE	
+
+https://v1-24.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/      official documents
+
+kind create cluster --image <>    easy in kind
+
+1225  apt update
+ 1226  apt-cache madison kubeadm
+ 1227  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B53DC80D13EDEF05
+ 1228  apt update
+ 1229  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4EB27DB2A3B88B8B
+ 1230  apt update
+ 1231  apt-cache madison kubeadm
+ 1232  apt-mark unhold kubeadm &&  apt-get update && apt-get install -y kubeadm=1.20.15-00 &&  apt-mark hold kubeadm
+ 1233  kubeadm version
+ 1234  kubeadm upgrade plan
+ 1235  kubeadm upgrade apply v1.20.15
+ 1236  vi /etc/kubernetes/manifests/
+ 1237  k get no
+ 1238  vi /etc/kubernetes/manifests/etcd.yaml 
+ 1239  k get no
+ 1240  kubeadm upgrade apply v1.20.15
+ 1241  kubeadm upgrade plan
+ 1242  history 
+ 1243  apt-cache madison kubeadm
+ 1244  history 
+ 1245  apt-mark unhold kubeadm &&  apt-get update && apt-get install -y kubeadm=1.20.15-00 &&  apt-mark hold kubeadm
+ 1246  kubeadm upgrade plan
+ 1247  kubeadm upgrade /etc/kubernetes/admin.conf 
+ 1248  kubeadm upgrade --config /etc/kubernetes/admin.conf 
+ 1249  kubeadm upgrade -h
+ 1250  kubeadm upgrade plan
+ 1251  kubeadm config upload from-file
+ 1252  kubeadm -h
+ 1253  kubeadm reset
+ 1254  kubeadm init
+ 1255  k get no
+ 1256  mkdir -p $HOME/.kube
+ 1257  rm  /home/labsuser/.kube/config
+ 1258  mkdir -p $HOME/.kube
+ 1259  k get no
+ 1260  apt update
+ 1261  apt-cache madison kubeadm
+ 1262  apt update
+ 1263  touch /var/lib/dpkg/status
+ 1264  mkdir touch /var/lib/dpkg
+ 1265  touch /var/lib/dpkg/status
+ 1266  apt update
+ 1267  apt-cache madison kubeadm
+ 1268  apt-mark unhold kubeadm &&  apt-get update && apt-get install -y kubeadm=1.20.15-00 &&  apt-mark hold kubeadm
+ 1269  mkdir -p /var/lib/dpkg/updates/
+ 1270  apt-mark unhold kubeadm &&  apt-get update && apt-get install -y kubeadm=1.20.15-00 &&  apt-mark hold kubeadm
+ 1271  touch /var/lib/dpkg/info/format-new
+ 1272  mkdir /var/lib/dpkg/info/
+ 1273  touch /var/lib/dpkg/info/format-new
+ 1274  apt-mark unhold kubeadm &&  apt-get update && apt-get install -y kubeadm=1.20.15-00 &&  apt-mark hold kubeadm
+ 1275  mkdir /var/lib/dpkg/alternatives
+ 1276  apt-mark unhold kubeadm &&  apt-get update && apt-get install -y kubeadm=1.20.15-00 &&  apt-mark hold kubeadm
+ 1277  touch /var/lib/dpkg/available
+ 1278  apt-mark unhold kubeadm &&  apt-get update && apt-get install -y kubeadm=1.20.15-00 &&  apt-mark hold kubeadm
+ 1279  kubeadm version
+ 1280  kubeadm upgrade plan
+ 1281  k apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+ 1282  k get no
+ 1283  kubeadm upgrade plan
+ 1284  k get no
+ 1285  k get po -n kube-system
+ 1286  k delete po coredns-74ff55c5b-jqm82 -n kube-system
+ 1287  k get po -n kube-system
+ 1288  k delete po coredns-74ff55c5b-bmdrd -n kube-system
+ 1289  k get no
+ 1290  k get po -n kube-system
+ 1291  k delete po weave-net-zbfcf -n kube-system
+ 1292  k get po -n kube-system
+ 1293  k get po -n kube-system -o wide
+ 1294  k delete po weave-net-zbfcf -n kube-system --force
+ 1295  k get po -n kube-system -o wide
+ 1296  k get po -n kube-system
+ 1297  k delete po coredns-74ff55c5b-jqm82 -n kube-system --force
+ 1298  k delete po coredns-74ff55c5b-bmdrd -n kube-system --force
+ 1299  k get po -n kube-system
+ 1300  k get po
+ 1301  k get no
+ 1302  k get po -n kube-system
+ 1303  k describe po weave-net-6kkrc -n kube-system
+ 1304  k get po -n kube-system
+ 1305  sudo systemctl enable docker
+ 1306  sudo systemctl daemon-reload
+ 1307  sudo systemctl restart docker
+ 1308  sudo swapoff -a
+ 1309  kubeadm reset
+ 1310  kubeadm init
+ 1311  sudo mkdir /etc/docker
+ 1312  cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+
+ 1313  sudo systemctl daemon-reload
+ 1314  sudo systemctl restart docker
+ 1315  sudo swapoff -a
+ 1316  kubeadm init
+ 1317  apt remove kubelet
+ 1318  kubeadm version
+ 1319  kubelet version
+ 1320  apt install kubelet
+ 1321  apt purge kubeadm kubelet
+ 1322  kubeadm version
+ 1323  apt install kubeadm kubelet
+ 1324  kubeadm init
+ 1325  systemctl status docker
+ 1326  kubeadm init
+ 1327  apt install containerd
+ 1328  kubeadm init
+ 1329  systemctl status containerd
+ 1330  cat > /etc/containerd/config.toml <<EOF
+[plugins."io.containerd.grpc.v1.cri"]
+  systemd_cgroup = true
+EOF
+
+ 1331  systemctl restart containerd
+ 1332  kubeadm init
+ 1333  history 
+ 1334  kubectl get no
+ 1335  cp /etc/kubernetes/admin.conf ~/.kube/config 
+ 1336  kubectl get no
+ 1337  k get po -n kube-system
+ 1338  kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+ 1339  k get no
+ 1340  k get po -n kube-system
+ 1341  k get no
+ 1342  k run nginx --image=nginx --port=80
+ 1343  k get po
+ 1344  k get po -o wid
+ 
+ 
+
+
+
+HELM CONCEPT
+1358  cd k8s_material/helm/
+ 1359  ls
+ 1360  cd example-app/
+ 1361  ls
+ 1362  cd ..
+ 1363  curl -LO https://get.helm.sh/helm-v3.4.0-linux-amd64.tar.gz
+ 1364  tar -C /tmp/ -zxvf helm-v3.4.0-linux-amd64.tar.gz
+ 1365  rm helm-v3.4.0-linux-amd64.tar.gz
+ 1366  mv /tmp/linux-amd64/helm /usr/local/bin/helm
+ 1367  chmod +x /usr/local/bin/helm
+ 1368  helm
+ 1369  cd
+ 1370  helm create myapp
+ 1371  cd myapp/
+ 1372  ls
+ 1373  vi Chart.yaml 
+ 1374  ls
+ 1375  rm values.yaml 
+ 1376  ls charts/
+ 1377  rm -rf charts/
+ 1378  cd templates/
+ 1379  rm -rf *
+ 1380  ls
+ 1381  cp ~/deploy.yaml .
+ 1382  vi deploy.yaml 
+ 1383  vi ../values.yaml
+ 1384  vi deploy.yaml 
+ 1385  vi ../values.yaml
+ 1386  vi service.yaml
+ 1387  vi deploy.yaml 
+ 1388  vi ../values.yaml 
+ 1389  cd ..
+ 1390  helm list
+ 1391  helm template myapp myapp/
+ 1392  helm install myapp myapp/
+ 1393  helm list
+ 1394  k get all
+ 1395  k get no -o wide
+ 1396  curl 172.31.2.114:30941
+ 1397  ls
+ 1398  copy -R myapp/ yourapp
+ 1399  copy -R myapp yourapp
+ 1400  cp -R myapp yourapp
+ 1401  vi yourapp/Chart.yaml 
+ 1402  vi yourapp/values.yaml 
+ 1403  helm install yourapp yourapp/
+ 1404  k get all
+ 1405  curl 172.31.2.114:31810
+ 1406  helm uninstall myapp
+ 1407  helm lisyt
+ 1408  helm list
+ 1409  k get all
+ 1410  history 
+ 1411  vi yourapp/values.yaml 
+ 1412  helm upgrade yourapp yourapp/
+ 1413  k get all
+ 
+ 
+ 
+  
+app:
+   name: myapp
+   image: rajendrait99/first:1.0
+   port: 8080
+   replicas: 5
+   type: NodePort
+   
+   
+   
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{.Values.app.name}}
+  name: {{.Values.app.name}}
+spec:
+  replicas: {{.Values.app.replicas}}
+  selector:
+    matchLabels:
+      app: {{.Values.app.name}}
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: {{.Values.app.name}}
+    spec:
+      containers:
+      - image: {{.Values.app.image}}
+        name: {{.Values.app.name}}
+        ports:
+        - containerPort: {{.Values.app.port}}
+        resources: {}
+status: {}
+
+
+apiVersion: v1
+kind: Service
+metadata:
+        name: {{.Values.app.name}}
+spec:
+     selector:
+             app: {{.Values.app.name}}
+     ports:
+        - port: {{.Values.app.port}}
+          targetPort: {{.Values.app.port}}
+     type: {{.Values.app.type}}
+	 
+	 
+	 
+	 
+	 
+	 
+artifactoryhub.io   
