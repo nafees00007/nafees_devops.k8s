@@ -62,7 +62,8 @@ Alias:
  git config --global alias.ci commit
  git config --global alias.st status
  git config --global --unset alias.br/ci/st/etc
- git config --global --unset-all (this command is not working)
+ git config --global --unset-all (this command is not working) (to delete all alias at once
+                                                               go to .gitconfig file and delete the list of alias.)
 
 Diff commands:
  Difference between two commits= git diff <old commit> <new commit>
