@@ -61,8 +61,8 @@ Alias:
  git config --global alias.br branch
  git config --global alias.ci commit
  git config --global alias.st status
- git config --global --unset "alias.name"
- git config --global --unset-all
+ git config --global --unset alias.br/ci/st/etc
+ git config --global --unset-all (this command is not working)
 
 Diff commands:
  Difference between two commits= git diff <old commit> <new commit>
